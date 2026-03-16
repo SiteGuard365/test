@@ -1,2 +1,67 @@
-.wcpi-shell .button.button-primary{background:#1d4ed8;border-color:#1d4ed8}
-.wcpi-shell .button:hover{transform:translateY(-1px)}
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+.wcpi-shell.wcpi-shell-hero {
+  --bg: #f4f6fb;
+  --white: #ffffff;
+  --border: #e4e9f2;
+  --text: #111827;
+  --muted: #6b7280;
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --violet: #7c3aed;
+  --violet-light: #f5f3ff;
+  --cyan: #0891b2;
+  --cyan-light: #ecfeff;
+  --rose: #e11d48;
+  --rose-light: #fff1f2;
+  --orange: #ea580c;
+  --orange-light: #fff7ed;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
+  --shadow-hover: 0 4px 20px rgba(37,99,235,.13);
+  --font: 'Plus Jakarta Sans', sans-serif;
+  font-family: var(--font);
+}
+
+.wcpi-shell.wcpi-shell-hero,
+.wcpi-shell.wcpi-shell-hero * { font-family: var(--font); }
+
+.wcpi-shell.wcpi-shell-hero .wcpi-kpi-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.wcpi-shell.wcpi-shell-hero .wcpi-kpi-row-2{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.wcpi-shell.wcpi-shell-hero .wcpi-insight-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.wcpi-shell.wcpi-shell-hero .wcpi-charts-top,
+.wcpi-shell.wcpi-shell-hero .wcpi-charts-bot{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+
+.wcpi-shell.wcpi-shell-hero .kpi{position:relative;background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);transition:.18s}
+.wcpi-shell.wcpi-shell-hero .kpi:hover{box-shadow:var(--shadow-hover);transform:translateY(-1px)}
+.wcpi-shell.wcpi-shell-hero .kpi::after{content:'';position:absolute;left:0;top:0;width:100%;height:4px;border-radius:14px 14px 0 0;background:var(--blue)}
+.wcpi-shell.wcpi-shell-hero .kpi.b::after{background:var(--blue)}.wcpi-shell.wcpi-shell-hero .kpi.g::after{background:var(--green)}
+.wcpi-shell.wcpi-shell-hero .kpi.r::after{background:var(--red)}.wcpi-shell.wcpi-shell-hero .kpi.v::after{background:var(--violet)}
+.wcpi-shell.wcpi-shell-hero .kpi.a::after{background:var(--amber)}.wcpi-shell.wcpi-shell-hero .kpi.c::after{background:var(--cyan)}
+.wcpi-shell.wcpi-shell-hero .kpi.ro::after{background:var(--rose)}
+.wcpi-shell.wcpi-shell-hero .kpi-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.wcpi-shell.wcpi-shell-hero .kpi-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.wcpi-shell.wcpi-shell-hero .kpi-value{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.8px;line-height:1;margin-bottom:8px}
+.wcpi-shell.wcpi-shell-hero .kpi-value.md{font-size:20px}.wcpi-shell.wcpi-shell-hero .kpi-value.sm{font-size:28px;letter-spacing:-1px}
+.wcpi-shell.wcpi-shell-hero .kpi-desc{font-size:11px;color:var(--muted);margin-top:4px}
+
+.wcpi-shell.wcpi-shell-hero .badge{display:inline-flex;align-items:center;gap:2px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px}
+.wcpi-shell.wcpi-shell-hero .badge.up{background:var(--green-light);color:var(--green);border:1px solid #a7f3d0}
+.wcpi-shell.wcpi-shell-hero .badge.dn{background:var(--red-light);color:var(--red);border:1px solid #fca5a5}
+.wcpi-shell.wcpi-shell-hero .badge.ne{background:#f3f4f6;color:var(--muted);border:1px solid #e5e7eb}
+
+.wcpi-shell.wcpi-shell-hero .dtbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.wcpi-shell.wcpi-shell-hero .dtbl thead tr{background:var(--bg);border-bottom:2px solid var(--border)}
+.wcpi-shell.wcpi-shell-hero .dtbl th{padding:9px 12px;text-align:left;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);white-space:nowrap}
+.wcpi-shell.wcpi-shell-hero .dtbl td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.wcpi-shell.wcpi-shell-hero .dtbl tbody tr:nth-child(even){background:#fafbff}
+.wcpi-shell.wcpi-shell-hero .dtbl tbody tr:hover{background:#eff6ff!important}
+
+.wcpi-shell.wcpi-shell-hero .button.button-primary{background:#1d4ed8;border-color:#1d4ed8}
+.wcpi-shell.wcpi-shell-hero .button:hover{transform:translateY(-1px)}

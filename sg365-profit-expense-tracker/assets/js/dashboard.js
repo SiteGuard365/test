@@ -1,4 +1,11 @@
 (function($){
+    function cleanText(value){
+        if(value == null){
+            return '';
+        }
+        return $('<div>').html(String(value)).text();
+    }
+
     function chartTooltip(canvas){
         var $frame = $(canvas).closest('.wcpi-chart-frame');
         if(!$frame.length){
@@ -65,13 +72,13 @@
             ctx.beginPath();
             ctx.moveTo(padding.left, lineY);
             ctx.lineTo(width - padding.right, lineY);
-            ctx.strokeStyle = 'rgba(148, 163, 184, 0.18)';
+            ctx.strokeStyle = '#f1f5f9';
             ctx.lineWidth = 1;
             ctx.stroke();
         }
 
-        ctx.font = '12px "Segoe UI", sans-serif';
-        ctx.fillStyle = '#64748b';
+        ctx.font = '10px "Plus Jakarta Sans", "Segoe UI", sans-serif';
+        ctx.fillStyle = '#9ca3af';
         ctx.fillText(labels[0] || '', padding.left, height - 10);
         if(labels.length > 1){
             var lastLabel = labels[labels.length - 1] || '';
@@ -112,16 +119,16 @@
                 }
             });
             ctx.strokeStyle = color;
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 2;
             ctx.stroke();
 
             if(hoverIndex != null && hoverIndex >= 0 && hoverIndex < data.length){
                 ctx.beginPath();
-                ctx.arc(x(hoverIndex), y(parseFloat(data[hoverIndex] || 0)), 4.5, 0, Math.PI * 2);
+                ctx.arc(x(hoverIndex), y(parseFloat(data[hoverIndex] || 0)), 3, 0, Math.PI * 2);
                 ctx.fillStyle = '#ffffff';
                 ctx.fill();
                 ctx.strokeStyle = color;
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 2;
                 ctx.stroke();
             }
         });
@@ -173,7 +180,7 @@
             return '';
         }
         return '<div class="wcpi-insight-strip">' + items.map(function(item){
-            return '<article class="wcpi-mini-card"><span class="wcpi-mini-label">' + WCPI.esc(item.label || '') + '</span><strong>' + WCPI.esc(item.value || '') + '</strong><small>' + WCPI.esc(item.meta || '') + '</small></article>';
+            return '<article class="wcpi-mini-card"><span class="wcpi-mini-label">' + WCPI.esc(cleanText(item.label || '')) + '</span><strong>' + WCPI.esc(cleanText(item.value || '')) + '</strong><small>' + WCPI.esc(cleanText(item.meta || '')) + '</small></article>';
         }).join('') + '</div>';
     }
 
@@ -223,15 +230,15 @@
 
         summary += WCPI.renderOverviewCards(payload);
         summary += insightStrip(payload.executive_insights || []);
-        summary += '<div class="wcpi-grid wcpi-grid-2">';
+        summary += '<div class="wcpi-charts-top">';
         summary += '<section class="wcpi-panel wcpi-panel-elevated"><div class="wcpi-panel-head"><div><h2>Revenue vs Net Profit</h2><p>See how top-line sales are converting into real take-home profit.</p></div><span class="wcpi-badge wcpi-badge-neutral">' + WCPI.money(payload.net_profit) + '</span></div><div class="wcpi-chart-frame"><canvas id="wcpiExecutiveRevenueChart" class="wcpi-chart" height="280"></canvas></div></section>';
         summary += '<section class="wcpi-panel wcpi-panel-elevated"><div class="wcpi-panel-head"><div><h2>Margin Trend</h2><p>Track profitability quality without opening multiple sections.</p></div><span class="wcpi-badge wcpi-badge-success">' + WCPI.percent(payload.margin_percent) + '</span></div><div class="wcpi-chart-frame"><canvas id="wcpiExecutiveMarginChart" class="wcpi-chart" height="280"></canvas></div></section>';
         summary += '</div>';
-        summary += '<div class="wcpi-grid wcpi-grid-2">';
+        summary += '<div class="wcpi-charts-bot">';
         summary += '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Budget Focus</h2><p>Over-budget categories are promoted first so attention is obvious.</p></div></div>' + WCPI.renderBudgetVsActual((payload.budget_vs_actual || []).slice(0, 5)) + '</section>';
         summary += '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Profit Waterfall</h2><p>A clean bridge from revenue to final net profit.</p></div></div>' + renderWaterfall(payload) + '<div class="wcpi-mini-card-grid">' + [
-            highlights.best_sales_day ? '<div class="wcpi-mini-card"><span class="wcpi-mini-label">Top Day</span><strong>' + WCPI.esc(highlights.best_sales_day.summary_date || '') + '</strong><small>' + WCPI.money(highlights.best_sales_day.gross_revenue || 0) + '</small></div>' : '',
-            highlights.top_product ? '<div class="wcpi-mini-card"><span class="wcpi-mini-label">Top Product</span><strong>' + WCPI.esc(highlights.top_product.name || '') + '</strong><small>' + WCPI.money(highlights.top_product.profit || 0) + '</small></div>' : ''
+            highlights.best_sales_day ? '<div class="wcpi-mini-card"><span class="wcpi-mini-label">Top Day</span><strong>' + WCPI.esc(highlights.best_sales_day.summary_date || '') + '</strong><small>' + WCPI.esc(cleanText(WCPI.money(highlights.best_sales_day.gross_revenue || 0))) + '</small></div>' : '',
+            highlights.top_product ? '<div class="wcpi-mini-card"><span class="wcpi-mini-label">Top Product</span><strong>' + WCPI.esc(highlights.top_product.name || '') + '</strong><small>' + WCPI.esc(cleanText(WCPI.money(highlights.top_product.profit || 0))) + '</small></div>' : ''
         ].join('') + '</div></section>';
         summary += '</div>';
 
