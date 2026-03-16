@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executive Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #f4f6fb;
+  --white: #ffffff;
+  --border: #e4e9f2;
+  --text: #111827;
+  --muted: #6b7280;
+
+  --blue: #2563eb;
+  --blue-light: #eff6ff;
+  --green: #059669;
+  --green-light: #ecfdf5;
+  --red: #dc2626;
+  --red-light: #fef2f2;
+  --amber: #d97706;
+  --amber-light: #fffbeb;
+  --violet: #7c3aed;
+  --violet-light: #f5f3ff;
+  --cyan: #0891b2;
+  --cyan-light: #ecfeff;
+  --rose: #e11d48;
+  --rose-light: #fff1f2;
+  --orange: #ea580c;
+  --orange-light: #fff7ed;
+
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
+  --shadow-hover: 0 4px 20px rgba(37,99,235,.13);
+  --font: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HERO HEADER ── */
+.hero-header {
+  background: linear-gradient(135deg, #f0f4ff 0%, #eef2ff 50%, #f5f3ff 100%);
+  border-bottom: 1px solid #dde3f5;
+  position: relative; overflow: hidden;
+}
+.hero-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 100% at 80% 0%, rgba(99,102,241,.07) 0%, transparent 70%),
+              radial-gradient(ellipse 35% 60% at 10% 100%, rgba(37,99,235,.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-header::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,.15), transparent);
+}
+.hero-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 24px 24px 20px;
+  display: flex; justify-content: space-between; align-items: center; gap: 20px;
+  position: relative; z-index: 1;
+}
+.hero-left { flex: 1; }
+.hero-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--blue);
+  margin-bottom: 5px; display: flex; align-items: center; gap: 8px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 18px; height: 2px;
+  background: var(--blue); border-radius: 2px; opacity: .5;
+}
+.hero-title {
+  font-size: 42px; font-weight: 800; color: var(--text);
+  letter-spacing: -2px; line-height: 1; margin-bottom: 8px;
+}
+.hero-desc {
+  font-size: 12.5px; color: var(--muted); line-height: 1.5; max-width: 520px;
+}
+.hero-actions {
+  display: flex; align-items: center; gap: 6px;
+  flex-wrap: nowrap; flex-shrink: 0;
+  position: relative; z-index: 1;
+}
+.hbtn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 13px; border-radius: 9px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all .18s; white-space: nowrap; font-family: var(--font);
+}
+.hbtn.primary {
+  background: var(--blue); color: #fff; border: none;
+  box-shadow: 0 2px 8px rgba(37,99,235,.25);
+}
+.hbtn.primary:hover { background: #1d4ed8; box-shadow: 0 4px 12px rgba(37,99,235,.35); transform: translateY(-1px); }
+.hbtn.outline {
+  background: rgba(255,255,255,.8); color: var(--text);
+  border: 1px solid #d4d9ef;
+  backdrop-filter: blur(6px);
+}
+.hbtn.outline:hover { background: #fff; border-color: var(--blue); color: var(--blue); }
+.hbtn svg { opacity: .7; }
+
+/* Status Bar */
+.hero-status-bar {
+  background: rgba(255,255,255,.55);
+  border-top: 1px solid rgba(99,102,241,.1);
+  position: relative; z-index: 1;
+  backdrop-filter: blur(4px);
+}
+.hero-status-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 8px 24px;
+  display: flex; align-items: center; gap: 0;
+  flex-wrap: wrap;
+}
+.hs-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 500; color: var(--muted);
+  padding: 0 14px 0 0;
+}
+.hs-item:first-child { padding-left: 0; }
+.hs-sep { width: 1px; height: 14px; background: #d4d9ef; margin-right: 14px; }
+.hs-currency-tag {
+  background: var(--blue-light); color: var(--blue);
+  font-size: 10px; font-weight: 800; padding: 2px 7px;
+  border-radius: 5px; letter-spacing: .4px; border: 1px solid #bfdbfe;
+}
+
+/* Filter Bar */
+.hero-filter-bar {
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+.hero-filter-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 14px 24px;
+  display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+}
+.hf-group {
+  display: flex; flex-direction: column; gap: 5px;
+  padding-right: 20px;
+}
+.hf-label {
+  font-size: 9.5px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--muted);
+}
+.hf-select-box {
+  font-size: 12.5px; font-weight: 600; color: var(--text);
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 14px; min-width: 130px;
+  cursor: pointer;
+}
+.hf-pills { display: flex; gap: 4px; }
+.hf-pill {
+  font-size: 11.5px; font-weight: 600; padding: 5px 10px;
+  border-radius: 7px; border: 1px solid var(--border);
+  background: var(--white); color: var(--muted); cursor: pointer; transition: all .15s;
+}
+.hf-pill:hover { border-color: var(--blue); color: var(--blue); }
+.hf-pill.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+.hf-date {
+  font-size: 12.5px; font-weight: 600; color: var(--text);
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 7px 12px; font-family: var(--font);
+  cursor: pointer;
+}
+.hf-date:focus { outline: none; border-color: var(--blue); }
+.hf-divider { width: 1px; height: 36px; background: var(--border); margin: 0 16px; }
+.hf-toggle { position: relative; display: inline-block; width: 40px; height: 22px; cursor: pointer; }
+.hf-toggle input { opacity: 0; width: 0; height: 0; }
+.hf-slider {
+  position: absolute; inset: 0;
+  background: #d1d5db; border-radius: 22px; transition: .25s;
+}
+.hf-slider::before {
+  content: ''; position: absolute;
+  width: 16px; height: 16px; left: 3px; top: 3px;
+  background: #fff; border-radius: 50%; transition: .25s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+.hf-toggle input:checked + .hf-slider { background: var(--blue); }
+.hf-toggle input:checked + .hf-slider::before { transform: translateX(18px); }
+.hf-btns { display: flex; gap: 6px; margin-left: auto; align-items: flex-end; }
+.hf-btn-apply {
+  padding: 8px 20px; border-radius: 9px; border: none;
+  background: var(--blue); color: #fff;
+  font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all .15s;
+  font-family: var(--font);
+}
+.hf-btn-apply:hover { background: #1d4ed8; transform: translateY(-1px); }
+.hf-btn-ghost {
+  padding: 7px 14px; border-radius: 9px;
+  border: 1px solid var(--border); background: var(--white);
+  color: var(--muted); font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all .15s; font-family: var(--font);
+}
+.hf-btn-ghost:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+
+/* Note Banner */
+.hero-note-banner {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border-bottom: 1px solid #bbf7d0;
+}
+.hero-note-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 14px 24px;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+}
+.hn-content { flex: 1; }
+.hn-title { font-size: 13.5px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.hn-desc  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.hn-date  { font-size: 11px; color: var(--muted); margin-top: 5px; font-weight: 500; }
+.hn-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.hn-alert-tag {
+  font-size: 11px; font-weight: 700; padding: 4px 12px;
+  border-radius: 20px; background: var(--green-light); color: var(--green);
+  border: 1px solid #a7f3d0;
+}
+.hn-more {
+  font-size: 18px; color: var(--muted); background: none; border: none;
+  cursor: pointer; padding: 2px 6px; border-radius: 6px; transition: all .15s;
+  letter-spacing: 1px;
+}
+.hn-more:hover { background: var(--border); color: var(--text); }
+
+/* ── NAV ── */
+.nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  height: 52px;
+  gap: 4px;
+  position: sticky; top:0; z-index:50;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+.nav-logo {
+  font-size: 15px; font-weight: 800;
+  color: var(--blue); margin-right: 20px; letter-spacing:-.4px;
+}
+.nav-btn {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 20px; border-radius: 10px;
+  font-size: 13px; font-weight: 600; color: var(--muted);
+  background: none; border: none; cursor: pointer; transition: all .2s;
+  letter-spacing: -.1px;
+}
+.nav-btn:hover { background: var(--bg); color: var(--text); }
+.nav-btn.active {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #fff; font-weight: 700;
+  box-shadow: 0 2px 10px rgba(37,99,235,.3);
+}
+.nav-btn .nav-icon {
+  width: 20px; height: 20px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+}
+.nav-btn.active .nav-icon { background: rgba(255,255,255,.2); }
+.nav-btn:not(.active):hover .nav-icon { background: var(--border); }
+.nav-btn .dot {
+  background: var(--amber); color:#fff;
+  font-size: 9px; font-weight:700; border-radius:10px; padding:1px 5px;
+  margin-left: 2px;
+}
+.nav-date {
+  margin-left: auto; font-size: 11.5px; color: var(--muted); font-weight:500;
+  background: var(--bg); border-radius:8px; padding:5px 12px; border:1px solid var(--border);
+}
+
+/* ── TABS CONTENT ── */
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+/* ── PAGE ── */
+.page { max-width: 1200px; margin: 0 auto; padding: 22px 20px 40px; }
+.section-head {
+  font-size: 10.5px; font-weight:800; text-transform:uppercase;
+  letter-spacing:2px; color: var(--muted);
+  margin-bottom: 14px; margin-top: 28px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-head::before {
+  content: ''; width: 14px; height: 2px;
+  background: var(--blue); border-radius: 2px;
+}
+.section-head:first-child { margin-top:0; }
+
+/* ── KPI ── */
+.kpi-row  { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:12px; }
+.kpi-row-2{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:24px; }
+
+.kpi {
+  background:var(--white); border-radius:var(--radius);
+  padding:16px 18px; border:1px solid var(--border); box-shadow:var(--shadow);
+  transition:box-shadow .2s, transform .2s; position:relative; overflow:hidden;
+}
+.kpi:hover { box-shadow:var(--shadow-hover); transform:translateY(-1px); }
+.kpi::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.kpi.b::after{background:var(--blue)} .kpi.g::after{background:var(--green)}
+.kpi.r::after{background:var(--red)}  .kpi.v::after{background:var(--violet)}
+.kpi.a::after{background:var(--amber)} .kpi.c::after{background:var(--cyan)}
+.kpi.ro::after{background:var(--rose)}
+
+.kpi-top  { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; }
+.kpi-label{ font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
+.kpi-icon { width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+.kpi-icon.b{background:var(--blue-light)} .kpi-icon.g{background:var(--green-light)}
+.kpi-icon.r{background:var(--red-light)}  .kpi-icon.v{background:var(--violet-light)}
+.kpi-icon.a{background:var(--amber-light)} .kpi-icon.c{background:var(--cyan-light)}
+.kpi-icon.ro{background:var(--rose-light)}
+
+.kpi-value { font-size:24px; font-weight:800; color:var(--text); letter-spacing:-.8px; line-height:1; margin-bottom:8px; }
+.kpi-value.md{font-size:20px} .kpi-value.sm{font-size:28px;letter-spacing:-1px}
+
+.badge { display:inline-flex; align-items:center; gap:2px; font-size:11px; font-weight:700; padding:3px 8px; border-radius:20px; }
+.badge.up{background:var(--green-light);color:var(--green);border:1px solid #a7f3d0}
+.badge.dn{background:var(--red-light);color:var(--red);border:1px solid #fca5a5}
+.badge.ne{background:#f3f4f6;color:var(--muted);border:1px solid #e5e7eb}
+.kpi-desc{ font-size:11px; color:var(--muted); margin-top:4px; }
+
+/* ── INSIGHTS ── */
+.insight-row{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:24px; }
+.insight { background:var(--white); border-radius:var(--radius); border:1px solid var(--border); box-shadow:var(--shadow); padding:14px 16px; }
+.insight-tag { font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; padding:2px 8px; border-radius:6px; display:inline-block; margin-bottom:9px; }
+.insight-tag.blue{background:var(--blue-light);color:var(--blue)}
+.insight-tag.green{background:var(--green-light);color:var(--green)}
+.insight-tag.red{background:var(--red-light);color:var(--red)}
+.insight-tag.amber{background:var(--amber-light);color:var(--amber)}
+.insight-tag.violet{background:var(--violet-light);color:var(--violet)}
+.insight-val  { font-size:20px; font-weight:800; color:var(--text); letter-spacing:-.5px; }
+.insight-name { font-size:11.5px; font-weight:600; color:var(--text); margin:4px 0 2px; line-height:1.3; }
+.insight-sub  { font-size:11px; color:var(--muted); }
+.live-dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; margin-right:5px; animation:blink 2s ease-in-out infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── CARDS ── */
+.charts-top{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.charts-bot{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card { background:var(--white); border-radius:var(--radius); border:1px solid var(--border); box-shadow:var(--shadow); padding:20px 22px; }
+.card-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; }
+.card-title { font-size:15px; font-weight:800; color:var(--text); letter-spacing:-.4px; }
+.card-sub   { font-size:11.5px; color:var(--muted); margin-top:3px; }
+.card-kpi   { font-size:18px; font-weight:800; letter-spacing:-.5px; }
+.card-kpi.blue{color:var(--blue)} .card-kpi.violet{color:var(--violet)}
+.legend { display:flex; gap:12px; margin-top:8px; }
+.leg { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--muted); font-weight:500; }
+.leg-dot { width:9px; height:9px; border-radius:3px; }
+
+/* ── BUDGET ── */
+.budget-item { padding:12px 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+.budget-item:last-child{border-bottom:none}
+.budget-name{ font-size:13px; font-weight:600; color:var(--text); min-width:90px; }
+.budget-amt { font-size:11px; color:var(--muted); margin-top:1px; }
+.bar-wrap { flex:1; height:5px; background:#f1f5f9; border-radius:99px; overflow:hidden; }
+.bar { height:100%; border-radius:99px; background:var(--red); }
+.over-tag { font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:20px; background:var(--red-light); color:var(--red); white-space:nowrap; }
+
+/* ── WATERFALL ── */
+.wf-row { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--border); }
+.wf-row:last-of-type{border-bottom:none}
+.wf-label  { font-size:12.5px; color:var(--muted); font-weight:500; min-width:100px; }
+.wf-bar-wrap{ flex:1; height:5px; background:#f1f5f9; border-radius:99px; overflow:hidden; }
+.wf-bar    { height:100%; border-radius:99px; }
+.wf-val    { font-size:13px; font-weight:700; color:var(--text); text-align:right; min-width:80px; }
+.wf-row.total .wf-label{font-weight:700;color:var(--text);font-size:13.5px}
+.wf-row.total .wf-val  {color:var(--blue);font-size:15px}
+.wf-footer { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
+.wf-mini { background:var(--bg); border-radius:10px; padding:11px 13px; }
+.wf-mini-tag { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); margin-bottom:4px; }
+.wf-mini-val { font-size:13px; font-weight:800; color:var(--text); line-height:1.3; }
+.wf-mini-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+
+/* ── PRODUCTS TABLE ── */
+.tbl-wrap { overflow-x:auto; }
+.dtbl { width:100%; border-collapse:collapse; font-size:12.5px; }
+.dtbl thead tr { background:var(--bg); border-bottom:2px solid var(--border); }
+.dtbl th { padding:9px 12px; text-align:left; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); white-space:nowrap; }
+.dtbl th.num { text-align:right; }
+.dtbl td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:middle; }
+.dtbl tbody tr:last-child td { border-bottom:none; }
+.dtbl tbody tr:nth-child(even) { background: #fafbff; }
+.dtbl tbody tr:hover { background: #eff6ff !important; }
+.dtbl td.num { text-align:right; white-space:nowrap; }
+.dtbl td.muted { color:var(--muted); }
+.dtbl td.fw { font-weight:700; }
+.prod-name { font-weight:600; color:var(--text); font-size:12px; max-width:240px; line-height:1.35; }
+.profit { color:var(--green); font-weight:700; }
+.warn-profit { color:var(--amber); font-weight:700; }
+.margin-bar { display:inline-flex; align-items:center; width:44px; height:5px; background:#f1f5f9; border-radius:99px; overflow:hidden; margin-right:5px; vertical-align:middle; }
+.margin-bar span { height:100%; border-radius:99px; background:var(--green); }
+.margin-bar.m-low span { background:var(--red); }
+.margin-bar.m-mid span { background:var(--amber); }
+.score-badge { display:inline-flex; align-items:center; justify-content:center; width:28px; height:20px; border-radius:6px; font-size:11px; font-weight:800; }
+.s-green{background:var(--green-light);color:var(--green);border:1px solid #a7f3d0}
+.s-amber{background:var(--amber-light);color:var(--amber);border:1px solid #fde68a}
+.s-red  {background:var(--red-light);color:var(--red);border:1px solid #fca5a5}
+.health-tag { display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:20px; }
+.health-tag.healthy{background:var(--green-light);color:var(--green);border:1px solid #a7f3d0}
+.health-tag.watch  {background:var(--amber-light);color:var(--amber);border:1px solid #fde68a}
+.health-tag.healthy::before{content:'●';font-size:7px}
+.health-tag.watch::before  {content:'●';font-size:7px}
+
+/* ── AUDIT ── */
+.audit-score-wrap { display:flex; align-items:center; gap:14px; margin-bottom:16px; }
+.audit-score-ring { position:relative; width:90px; height:90px; flex-shrink:0; }
+.audit-score-center { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.audit-label-wrap { flex:1; }
+.audit-tag { display:inline-block; font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:20px; }
+.audit-tag.green{background:var(--green-light);color:var(--green)}
+.audit-list { display:flex; flex-direction:column; }
+.audit-row { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); font-size:12px; color:var(--muted); }
+.audit-row:last-child{border-bottom:none}
+.audit-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.audit-dot.green{background:var(--green)} .audit-dot.amber{background:var(--amber)} .audit-dot.muted{background:#d1d5db}
+.audit-row span:nth-child(2){flex:1}
+.audit-val{font-weight:700;font-size:12px}
+.audit-val.green{color:var(--green)} .audit-val.amber{color:var(--amber)} .audit-val.muted{color:var(--muted)}
+.audit-btn { margin-top:14px; width:100%; padding:9px; border-radius:9px; background:var(--blue-light); color:var(--blue); border:1px solid #bfdbfe; font-size:12px; font-weight:700; cursor:pointer; transition:all .15s; }
+.audit-btn:hover{background:var(--blue);color:#fff}
+
+/* ── HEATMAP ── */
+.heatmap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.hmap-card { border-radius:12px; padding:14px 16px; border:1px solid transparent; transition:transform .18s,box-shadow .18s; cursor:default; }
+.hmap-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.hmap-high    {background:#f0fdf4;border-color:#bbf7d0}
+.hmap-mid     {background:#eff6ff;border-color:#bfdbfe}
+.hmap-low     {background:#fffbeb;border-color:#fde68a}
+.hmap-critical{background:#fef2f2;border-color:#fecaca}
+.hmap-icon  {font-size:20px;margin-bottom:6px}
+.hmap-name  {font-size:12px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:8px}
+.hmap-margin{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.8px;margin-bottom:6px}
+.hmap-bar-wrap{height:5px;background:rgba(0,0,0,.08);border-radius:99px;overflow:hidden;margin-bottom:8px}
+.hmap-bar   {height:100%;border-radius:99px}
+.hmap-stats {display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);font-weight:500}
+
+/* ── PLANNING: GOALS ── */
+.goal-row { padding:16px 0; }
+.goal-divider { height:1px; background:var(--border); }
+.goal-meta { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.goal-label { font-size:13px; font-weight:700; color:var(--text); }
+.goal-status { font-size:10.5px; font-weight:700; padding:2px 9px; border-radius:20px; }
+.goal-status.behind { background:var(--red-light); color:var(--red); }
+.goal-status.on-track { background:var(--green-light); color:var(--green); }
+.goal-figures { display:flex; align-items:baseline; gap:6px; margin-bottom:10px; }
+.goal-actual { font-size:20px; font-weight:800; color:var(--text); letter-spacing:-.5px; }
+.goal-sep    { font-size:14px; color:var(--muted); }
+.goal-target { font-size:14px; font-weight:600; color:var(--muted); }
+.goal-pct    { font-size:12px; font-weight:700; color:var(--red); background:var(--red-light); padding:2px 8px; border-radius:20px; margin-left:4px; }
+.goal-track-wrap { }
+.goal-track { height:8px; background:#f1f5f9; border-radius:99px; overflow:hidden; margin-bottom:5px; position:relative; }
+.goal-fill { height:100%; border-radius:99px; transition:width 1s cubic-bezier(.4,0,.2,1); }
+.gf-red   { background: linear-gradient(90deg,#ef4444,#f87171); }
+.gf-amber { background: linear-gradient(90deg,#d97706,#fbbf24); }
+.gf-green { background: linear-gradient(90deg,#059669,#34d399); }
+.goal-track-labels { display:flex; justify-content:space-between; font-size:10.5px; color:var(--muted); font-weight:500; }
+
+/* ── PLANNING: BUDGET vs ACTUAL ── */
+.bva-row { display:flex; align-items:center; gap:16px; padding:14px 0; }
+.bva-divider { height:1px; background:var(--border); }
+.bva-left { min-width:130px; }
+.bva-name { font-size:13px; font-weight:700; color:var(--text); }
+.bva-amounts { font-size:11px; color:var(--muted); margin-top:2px; }
+.bva-bar-area { flex:1; }
+.bva-track { height:8px; background:#f1f5f9; border-radius:99px; overflow:hidden; margin-bottom:4px; }
+.bva-fill { height:100%; border-radius:99px; }
+.bva-over { background:linear-gradient(90deg,#ef4444,#f87171); }
+.bva-ok   { background:linear-gradient(90deg,#059669,#34d399); }
+.bva-track-labels { display:flex; justify-content:space-between; font-size:10px; color:var(--muted); }
+.bva-tag { font-size:11px; font-weight:700; padding:4px 11px; border-radius:20px; white-space:nowrap; }
+.bva-tag.over { background:var(--red-light); color:var(--red); }
+.bva-tag.ok   { background:var(--green-light); color:var(--green); }
+
+/* ── PLANNING: NOTES ── */
+.note-action-btn {
+  font-size:11px; font-weight:700; padding:5px 11px; border-radius:8px; cursor:pointer; border:1px solid; transition:all .15s;
+}
+.note-action-btn.blue { background:var(--blue-light); color:var(--blue); border-color:#bfdbfe; }
+.note-action-btn.blue:hover { background:var(--blue); color:#fff; }
+.note-action-btn.green { background:var(--green-light); color:var(--green); border-color:#a7f3d0; }
+.note-action-btn.green:hover { background:var(--green); color:#fff; }
+
+.note-card {
+  border-radius:10px; padding:12px 14px;
+  border-left:3px solid transparent; border:1px solid var(--border);
+  position:relative;
+}
+.note-card.note-alert { background:#fff7ed; border-color:#fed7aa; border-left:3px solid var(--orange); }
+.note-card.note-info  { background:#eff6ff; border-color:#bfdbfe; border-left:3px solid var(--blue); }
+.note-card.note-ended { background:#f9fafb; border-color:#e5e7eb; border-left:3px solid #9ca3af; opacity:.75; }
+
+.note-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
+.note-tags   { display:flex; gap:5px; flex-wrap:wrap; }
+.ntag { font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:5px; }
+.ntag.alert   { background:#fff1f2; color:var(--rose); }
+.ntag.removed { background:#f3f4f6; color:var(--muted); }
+.ntag.email   { background:var(--blue-light); color:var(--blue); }
+.ntag.update  { background:var(--violet-light); color:var(--violet); }
+.note-badge { font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; }
+.active-note { background:var(--green-light); color:var(--green); }
+.ended-note  { background:#f3f4f6; color:var(--muted); }
+.note-title  { font-size:12.5px; font-weight:700; color:var(--text); margin-bottom:3px; }
+.note-date   { font-size:11px; color:var(--muted); margin-bottom:5px; }
+.note-desc   { font-size:11.5px; color:var(--muted); line-height:1.55; }
+
+/* ── PLANNING: NEXT ACTIONS ── */
+.action-item {
+  display:flex; gap:14px; padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+.ai-num {
+  font-size:11px; font-weight:800; color:var(--muted);
+  background:var(--bg); border-radius:6px;
+  width:28px; height:24px; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; margin-top:2px; letter-spacing:.5px;
+}
+.ai-warn .ai-num  { background:var(--amber-light); color:var(--amber); }
+.ai-action .ai-num{ background:var(--blue-light);  color:var(--blue); }
+.ai-body { flex:1; }
+.ai-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:5px; }
+.ai-title { font-size:12.5px; font-weight:700; color:var(--text); flex:1; line-height:1.35; }
+.ai-tag   { font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+.ai-tag.warning   { background:var(--amber-light); color:var(--amber); }
+.ai-tag.actionable{ background:var(--blue-light);  color:var(--blue); }
+.ai-desc { font-size:11.5px; color:var(--muted); line-height:1.55; }
+.ai-btn  {
+  margin-top:9px; font-size:11px; font-weight:700;
+  padding:5px 12px; border-radius:8px; cursor:pointer; border:none;
+  background:var(--bg); color:var(--text); transition:all .15s;
+  border:1px solid var(--border);
+}
+.ai-btn:hover { background:var(--blue); color:#fff; border-color:var(--blue); }
+
+/* ── PLANNING: CHART LEGEND FIX ── */
+.leg-dot.dashed { background:transparent !important; }
+
+/* ── ANIMATIONS ── */
+.kpi,.insight,.card,.rec-card,.health-card { animation:rise .35s ease both; }
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── SKELETON LOADER ── */
+.skeleton-wrap { display:flex; flex-direction:column; gap:14px; }
+.skel { background:var(--white); border-radius:var(--radius); border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden; }
+.skel-inner { padding:20px 22px; }
+.skel-line {
+  height:12px; border-radius:6px; background:linear-gradient(90deg,#f1f5f9 25%,#e4e9f2 50%,#f1f5f9 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s infinite;
+  margin-bottom:10px;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-line.wide{width:60%;height:14px}
+.skel-line.narrow{width:40%;height:10px}
+.skel-line.full{width:90%}
+.skel-line.med{width:50%}
+.skel-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.skel-grid-3 { display:grid; grid-template-columns:2fr 1fr; gap:14px; }
+.skel-block { height:80px; border-radius:8px; background:linear-gradient(90deg,#f1f5f9 25%,#e4e9f2 50%,#f1f5f9 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; margin-bottom:0; }
+
+/* ── RECOMMENDATIONS PAGE ── */
+.rec-layout { display:grid; grid-template-columns:1fr 340px; gap:18px; }
+
+/* Health Score */
+.health-card {
+  background:var(--white); border-radius:var(--radius);
+  border:1px solid var(--border); box-shadow:var(--shadow);
+  padding:22px;
+}
+.health-title { font-size:15px; font-weight:800; color:var(--text); letter-spacing:-.3px; }
+.health-sub   { font-size:11.5px; color:var(--muted); margin-top:3px; margin-bottom:20px; }
+
+.score-ring-wrap { display:flex; justify-content:center; margin:0 0 18px; }
+.score-ring { position:relative; width:130px; height:130px; }
+.score-ring svg { transform:rotate(-90deg); }
+.score-ring circle.track { fill:none; stroke:#f1f5f9; stroke-width:10; }
+.score-ring circle.fill  {
+  fill:none; stroke:var(--blue); stroke-width:10;
+  stroke-linecap:round;
+  stroke-dasharray: 339.3;
+  stroke-dashoffset: 339.3;
+  transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1);
+}
+.score-center {
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+}
+.score-num  { font-size:32px; font-weight:800; color:var(--text); letter-spacing:-1px; line-height:1; }
+.score-lbl  { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-top:2px; }
+
+.health-pills { display:flex; gap:8px; justify-content:center; margin-bottom:20px; }
+.hpill { font-size:11px; font-weight:700; padding:4px 11px; border-radius:20px; }
+.hpill.crit { background:var(--red-light); color:var(--red); }
+.hpill.warn { background:var(--amber-light); color:var(--amber); }
+.hpill.opp  { background:var(--green-light); color:var(--green); }
+
+.health-items { display:flex; flex-direction:column; gap:10px; }
+.health-item {
+  background:var(--bg); border-radius:10px; padding:12px 14px;
+  border:1px solid var(--border);
+}
+.hi-title { font-size:12.5px; font-weight:700; color:var(--text); margin-bottom:3px; }
+.hi-desc  { font-size:11px; color:var(--muted); line-height:1.5; }
+
+/* Alerts & Improvements */
+.rec-card {
+  background:var(--white); border-radius:var(--radius);
+  border:1px solid var(--border); box-shadow:var(--shadow);
+  padding:18px 20px; margin-bottom:14px;
+  cursor:pointer; transition:box-shadow .2s, transform .2s;
+  position:relative; overflow:hidden;
+}
+.rec-card:hover { box-shadow:var(--shadow-hover); transform:translateY(-1px); }
+.rec-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+}
+.rec-card.warning::before  { background:var(--amber); }
+.rec-card.actionable::before{ background:var(--blue); }
+.rec-card.opportunity::before{ background:var(--green); }
+
+.rec-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; gap:10px; }
+.rec-title { font-size:13px; font-weight:700; color:var(--text); line-height:1.4; flex:1; }
+.rec-badge { font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+.rec-badge.warning  { background:var(--amber-light); color:var(--amber); }
+.rec-badge.actionable{ background:var(--blue-light); color:var(--blue); }
+.rec-badge.opportunity{ background:var(--green-light); color:var(--green); }
+.rec-desc { font-size:12px; color:var(--muted); line-height:1.6; }
+.rec-actions { display:flex; align-items:center; justify-content:space-between; margin-top:12px; }
+.rec-btn {
+  font-size:11px; font-weight:600; padding:5px 12px;
+  border-radius:8px; border:1px solid var(--border);
+  background:var(--white); color:var(--text); cursor:pointer;
+  transition:all .15s;
+}
+.rec-btn:hover { background:var(--bg); border-color: var(--blue); color:var(--blue); }
+.rec-arrow { color:var(--muted); font-size:14px; }
+
+.rec-section-title {
+  font-size:13px; font-weight:800; color:var(--text);
+  letter-spacing:-.2px; margin:20px 0 10px;
+  display:flex; align-items:center; gap:8px;
+}
+.rec-section-title .cnt {
+  background:var(--blue-light); color:var(--blue);
+  font-size:10px; font-weight:700; border-radius:10px; padding:1px 7px;
+}
+
+/* Cards grid */
+.rec-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO HEADER ══ -->
+<div class="hero-header">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">PROFIT INTELLIGENCE</div>
+      <div class="hero-title">Overview</div>
+      <div class="hero-desc">Actionable insights with real-time profitability tracking, sales trends, advanced planning analytics and smart cost intelligence.</div>
+    </div>
+    <div class="hero-actions">
+      <button class="hbtn primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Add Expense
+      </button>
+      <button class="hbtn outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Add Note
+      </button>
+      <button class="hbtn outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Reports
+      </button>
+      <button class="hbtn outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+      <button class="hbtn outline">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </button>
+    </div>
+  </div>
+
+  <!-- Status Bar -->
+  <div class="hero-status-bar">
+    <div class="hero-status-inner">
+      <div class="hs-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Feb 15 &ndash; Mar 16, 2026
+      </div>
+      <div class="hs-sep"></div>
+      <div class="hs-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+        vs prev. 30 days
+      </div>
+      <div class="hs-sep"></div>
+      <div class="hs-item">
+        <span class="hs-currency-tag">₹</span>
+        INR
+      </div>
+      <div class="hs-sep"></div>
+      <div class="hs-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Refreshed: Mar 16, 2026, 5:55:42 PM
+      </div>
+    </div>
+  </div>
+
+  <!-- Date Filter Bar -->
+  <div class="hero-filter-bar">
+    <div class="hero-filter-inner">
+      <div class="hf-group">
+        <div class="hf-label">PRESET</div>
+        <div class="hf-select-box">Last 30 Days</div>
+      </div>
+      <div class="hf-divider"></div>
+      <div class="hf-group">
+        <div class="hf-label">QUICK</div>
+        <div class="hf-pills">
+          <button class="hf-pill">7D</button>
+          <button class="hf-pill active">30D</button>
+          <button class="hf-pill">MTD</button>
+          <button class="hf-pill">QTD</button>
+          <button class="hf-pill">YTD</button>
+        </div>
+      </div>
+      <div class="hf-divider"></div>
+      <div class="hf-group">
+        <div class="hf-label">FROM</div>
+        <input class="hf-date" type="date" value="2026-02-15">
+      </div>
+      <div class="hf-group">
+        <div class="hf-label">TO</div>
+        <input class="hf-date" type="date" value="2026-03-16">
+      </div>
+      <div class="hf-divider"></div>
+      <div class="hf-group">
+        <div class="hf-label">COMPARE PREVIOUS PERIOD</div>
+        <label class="hf-toggle">
+          <input type="checkbox" checked>
+          <span class="hf-slider"></span>
+        </label>
+      </div>
+      <div class="hf-btns">
+        <button class="hf-btn-apply">Apply</button>
+        <button class="hf-btn-ghost">Reset</button>
+        <button class="hf-btn-ghost">Refresh</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Note Banner -->
+  <div class="hero-note-banner">
+    <div class="hero-note-inner">
+      <div class="hn-content">
+        <div class="hn-title">Note 1</div>
+        <div class="hn-desc">Active notes appear on this overview page and the main WordPress dashboard while the effective date window is valid.</div>
+        <div class="hn-date">March 16, 2026 &ndash; March 17, 2026</div>
+      </div>
+      <div class="hn-right">
+        <span class="hn-alert-tag">Alert</span>
+        <button class="hn-more">&#x22EF;</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="switchTab('executive',this)">
+    <span class="nav-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    </span>
+    Executive
+  </button>
+  <button class="nav-btn" onclick="switchTab('recommendations',this)">
+    <span class="nav-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    </span>
+    Recommendations
+  </button>
+  <button class="nav-btn" onclick="switchTab('products',this)">
+    <span class="nav-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+    </span>
+    Products
+  </button>
+  <button class="nav-btn" onclick="switchTab('planning',this)">
+    <span class="nav-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </span>
+    Planning <span class="dot">1</span>
+  </button>
+</nav>
+
+<!-- ══ EXECUTIVE TAB ══ -->
+<div id="tab-executive" class="tab-content active">
+<div class="page">
+
+  <div class="section-head">Metrics in Focus</div>
+
+  <div class="kpi-row">
+    <div class="kpi b">
+      <div class="kpi-top"><div class="kpi-label">Revenue</div><div class="kpi-icon b">💰</div></div>
+      <div class="kpi-value">₹4,910.00</div>
+      <span class="badge dn">↓ 42.4%</span>
+      <div class="kpi-desc">Top-line sales for selected range</div>
+    </div>
+    <div class="kpi g">
+      <div class="kpi-top"><div class="kpi-label">Gross Profit</div><div class="kpi-icon g">📈</div></div>
+      <div class="kpi-value">₹2,510.00</div>
+      <span class="badge ne">—</span>
+      <div class="kpi-desc">Before operating expenses</div>
+    </div>
+    <div class="kpi v">
+      <div class="kpi-top"><div class="kpi-label">Net Profit</div><div class="kpi-icon v">🏦</div></div>
+      <div class="kpi-value">₹2,308.00</div>
+      <span class="badge dn">↓ 72.9%</span>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);">Margin %</div>
+          <div style="font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;">47.0%</div>
+        </div>
+        <span class="badge dn" style="align-self:flex-end;margin-bottom:3px;">↓ 33.0%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="kpi-row-2">
+    <div class="kpi r">
+      <div class="kpi-top"><div class="kpi-label">Expenses</div><div class="kpi-icon r">💸</div></div>
+      <div class="kpi-value sm">₹202</div>
+      <span class="badge dn">↑ 100%</span>
+      <div class="kpi-desc">Tracked operating spend</div>
+    </div>
+    <div class="kpi a">
+      <div class="kpi-top"><div class="kpi-label">Orders</div><div class="kpi-icon a">🛒</div></div>
+      <div class="kpi-value sm">12</div>
+      <span class="badge dn">↓ 50.0%</span>
+      <div class="kpi-desc">Paid &amp; processing</div>
+    </div>
+    <div class="kpi g">
+      <div class="kpi-top"><div class="kpi-label">Refunds</div><div class="kpi-icon g">↩️</div></div>
+      <div class="kpi-value sm">₹0</div>
+      <span class="badge up">↑ 0.0%</span>
+      <div class="kpi-desc">Refund impact this range</div>
+    </div>
+    <div class="kpi c">
+      <div class="kpi-top"><div class="kpi-label">Avg Order Val</div><div class="kpi-icon c">🎯</div></div>
+      <div class="kpi-value md">₹409.17</div>
+      <span class="badge up">↑ 15.3%</span>
+      <div class="kpi-desc">Per order average</div>
+    </div>
+    <div class="kpi ro">
+      <div class="kpi-top"><div class="kpi-label">Units Sold</div><div class="kpi-icon ro">📦</div></div>
+      <div class="kpi-value sm">15</div>
+      <span class="badge dn">↓ 57.1%</span>
+      <div class="kpi-desc">Total units sold</div>
+    </div>
+  </div>
+
+  <div class="section-head">Business Highlights</div>
+  <div class="insight-row">
+    <div class="insight">
+      <div class="insight-tag blue">Best Day</div>
+      <div class="insight-val">₹900.00</div>
+      <div class="insight-name">March 15, 2026</div>
+      <div class="insight-sub">Peak revenue day</div>
+    </div>
+    <div class="insight">
+      <div class="insight-tag green">Top Product</div>
+      <div class="insight-name">Adobe Acrobat Pro DC 2024 for Mac</div>
+      <div class="insight-val" style="margin-top:6px;">₹600.00</div>
+      <div class="insight-sub">Lifetime license</div>
+    </div>
+    <div class="insight">
+      <div class="insight-tag red">Lowest Margin</div>
+      <div class="insight-name">Windows Server 2019 License Key</div>
+      <div class="insight-val" style="margin-top:6px;">25.0%</div>
+      <div class="insight-sub">Margin rate</div>
+    </div>
+    <div class="insight">
+      <div class="insight-tag amber">Missing Costs</div>
+      <div class="insight-val">0</div>
+      <div class="insight-sub" style="margin-top:4px;">All products have cost data</div>
+    </div>
+    <div class="insight">
+      <div class="insight-tag violet">Category Leader</div>
+      <div class="insight-name">Adobe Products</div>
+      <div class="insight-val" style="margin-top:6px;">₹700.00</div>
+      <div class="insight-sub" style="margin-top:4px;"><span class="live-dot"></span>Expense tracking active</div>
+    </div>
+  </div>
+
+  <div class="section-head">Performance Trends</div>
+  <div class="charts-top">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Revenue vs Net Profit</div>
+          <div class="card-sub">How top-line sales convert into take-home profit</div>
+          <div class="legend">
+            <div class="leg"><div class="leg-dot" style="background:#2563eb;"></div>Revenue</div>
+            <div class="leg"><div class="leg-dot" style="background:#059669;"></div>Net Profit</div>
+          </div>
+        </div>
+        <div class="card-kpi blue">₹2,308</div>
+      </div>
+      <canvas id="revChart" height="150"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Margin Trend</div>
+          <div class="card-sub">Profitability quality over the period</div>
+          <div class="legend">
+            <div class="leg"><div class="leg-dot" style="background:#7c3aed;"></div>Margin %</div>
+          </div>
+        </div>
+        <div class="card-kpi violet">47.0%</div>
+      </div>
+      <canvas id="margChart" height="150"></canvas>
+    </div>
+  </div>
+
+  <div class="charts-bot">
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Budget Focus</div>
+          <div class="card-sub">Over-budget categories highlighted first</div>
+        </div>
+      </div>
+      <div class="budget-item">
+        <div><div class="budget-name">Advertising</div><div class="budget-amt">₹200.00 spent / ₹0.00 budget</div></div>
+        <div class="bar-wrap"><div class="bar" style="width:100%"></div></div>
+        <div class="over-tag">Over ₹200.00</div>
+      </div>
+      <div class="budget-item">
+        <div><div class="budget-name">Packaging</div><div class="budget-amt">₹2.00 spent / ₹0.00 budget</div></div>
+        <div class="bar-wrap"><div class="bar" style="width:100%"></div></div>
+        <div class="over-tag">Over ₹2.00</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Profit Waterfall</div>
+          <div class="card-sub">A clean bridge from revenue to final net profit</div>
+        </div>
+      </div>
+      <div class="wf-row"><div class="wf-label">Revenue</div><div class="wf-bar-wrap"><div class="wf-bar" style="width:100%;background:#2563eb;"></div></div><div class="wf-val">₹4,910.00</div></div>
+      <div class="wf-row"><div class="wf-label">Discounts</div><div class="wf-bar-wrap"><div class="wf-bar" style="width:1%;background:#dc2626;"></div></div><div class="wf-val">₹0.00</div></div>
+      <div class="wf-row"><div class="wf-label">Refunds</div><div class="wf-bar-wrap"><div class="wf-bar" style="width:1%;background:#dc2626;"></div></div><div class="wf-val">₹0.00</div></div>
+      <div class="wf-row"><div class="wf-label">Product Cost</div><div class="wf-bar-wrap"><div class="wf-bar" style="width:49%;background:#d97706;"></div></div><div class="wf-val">₹2,400.00</div></div>
+      <div class="wf-row"><div class="wf-label">Expenses</div><div class="wf-bar-wrap"><div class="wf-bar" style="width:4%;background:#f97316;"></div></div><div class="wf-val">₹202.00</div></div>
+      <div class="wf-row total"><div class="wf-label">Net Profit</div><div class="wf-bar-wrap"><div class="wf-bar" style="width:47%;background:#059669;"></div></div><div class="wf-val">₹2,308.00</div></div>
+      <div class="wf-footer">
+        <div class="wf-mini"><div class="wf-mini-tag">Top Day</div><div class="wf-mini-val">2026-03-15</div><div class="wf-mini-sub">₹900.00</div></div>
+        <div class="wf-mini"><div class="wf-mini-tag">Top Product</div><div class="wf-mini-val">Adobe Acrobat Pro DC 2024</div><div class="wf-mini-sub">₹600.00</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /tab-executive -->
+
+
+<!-- ══ RECOMMENDATIONS TAB ══ -->
+<div id="tab-recommendations" class="tab-content">
+<div class="page">
+
+  <!-- SKELETON shown while "loading" -->
+  <div id="rec-skeleton">
+    <div class="section-head" style="margin-top:0;">Loading recommendations…</div>
+    <div class="rec-layout">
+      <div>
+        <div class="skel-grid" style="margin-bottom:14px;">
+          <div class="skel"><div class="skel-inner"><div class="skel-line wide"></div><div class="skel-line narrow"></div><div class="skel-block"></div></div></div>
+          <div class="skel"><div class="skel-inner"><div class="skel-line wide"></div><div class="skel-line narrow"></div><div class="skel-block"></div></div></div>
+        </div>
+        <div class="skel-grid">
+          <div class="skel"><div class="skel-inner"><div class="skel-line full"></div><div class="skel-line med"></div><div class="skel-block"></div></div></div>
+          <div class="skel"><div class="skel-inner"><div class="skel-line full"></div><div class="skel-line med"></div><div class="skel-block"></div></div></div>
+        </div>
+      </div>
+      <div class="skel" style="min-height:360px;"><div class="skel-inner"><div class="skel-line wide"></div><div class="skel-line narrow" style="margin-bottom:20px;"></div><div class="skel-block" style="height:130px;border-radius:50%;width:130px;margin:0 auto 20px;"></div><div class="skel-line full"></div><div class="skel-line med"></div><div class="skel-line full"></div></div></div>
+    </div>
+  </div>
+
+  <!-- ACTUAL CONTENT hidden until loaded -->
+  <div id="rec-content" style="display:none;">
+    <div class="section-head" style="margin-top:0;">AI Recommendations</div>
+    <div class="rec-layout">
+
+      <!-- LEFT: Alerts + Improvements -->
+      <div>
+        <div class="rec-section-title">🚨 Priority Alerts <span class="cnt">2</span></div>
+        <div class="rec-grid">
+
+          <div class="rec-card warning" style="animation-delay:.05s">
+            <div class="rec-head">
+              <div class="rec-title">2 variations are missing cost rows</div>
+              <span class="rec-badge warning">⚠ Warning</span>
+            </div>
+            <div class="rec-desc">Variation-specific costs improve profit accuracy when options have different cost structures. Add missing variation rows where needed.</div>
+            <div class="rec-actions">
+              <button class="rec-btn">Review Variations</button>
+              <span class="rec-arrow">›</span>
+            </div>
+          </div>
+
+          <div class="rec-card actionable" style="animation-delay:.1s">
+            <div class="rec-head">
+              <div class="rec-title">Net profit dropped versus the previous period</div>
+              <span class="rec-badge actionable">✦ Actionable</span>
+            </div>
+            <div class="rec-desc">Profit is lower than the immediately preceding period. Review product mix, expense changes, and refund spikes for the selected dates.</div>
+            <div class="rec-actions">
+              <button class="rec-btn">Review</button>
+              <span class="rec-arrow">›</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="rec-section-title" style="margin-top:22px;">💡 Suggested Improvements <span class="cnt">3</span></div>
+        <div class="rec-grid">
+
+          <div class="rec-card actionable" style="animation-delay:.15s">
+            <div class="rec-head">
+              <div class="rec-title">Margin dropped significantly versus the previous period</div>
+              <span class="rec-badge actionable">✦ Actionable</span>
+            </div>
+            <div class="rec-desc">Revenue can grow while profit quality declines. Review low-margin products, refunds, and expense changes for the selected range.</div>
+            <div class="rec-actions">
+              <button class="rec-btn">Review</button>
+              <span class="rec-arrow">›</span>
+            </div>
+          </div>
+
+          <div class="rec-card warning" style="animation-delay:.2s">
+            <div class="rec-head">
+              <div class="rec-title">Advertising is over budget</div>
+              <span class="rec-badge warning">⚠ Warning</span>
+            </div>
+            <div class="rec-desc">This category is over budget by ₹200.00 in the selected period. Review and adjust spend limits or reallocate budget accordingly.</div>
+            <div class="rec-actions">
+              <button class="rec-btn">Review Expenses</button>
+              <span class="rec-arrow">›</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="margin-top:12px;">
+          <div class="rec-card opportunity" style="animation-delay:.25s">
+            <div class="rec-head">
+              <div class="rec-title">No recurring expenses configured</div>
+              <span class="rec-badge opportunity">✔ Opportunity</span>
+            </div>
+            <div class="rec-desc">Set up rent, salaries, subscriptions, and utilities as recurring expenses to keep future profit reporting consistent and automated.</div>
+            <div class="rec-actions">
+              <button class="rec-btn">Add Recurring Expense</button>
+              <span class="rec-arrow">›</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Health Score -->
+      <div>
+        <div class="health-card" style="animation-delay:.08s">
+          <div class="health-title">AI Health Score</div>
+          <div class="health-sub">Compact signal summary inspired by premium analytics apps.</div>
+
+          <div class="score-ring-wrap">
+            <div class="score-ring">
+              <svg width="130" height="130" viewBox="0 0 130 130">
+                <circle class="track" cx="65" cy="65" r="54"/>
+                <circle class="fill" id="scoreCircle" cx="65" cy="65" r="54"/>
+              </svg>
+              <div class="score-center">
+                <div class="score-num" id="scoreNum">0</div>
+                <div class="score-lbl">Health Score</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="health-pills">
+            <div class="hpill crit">Critical &nbsp;0</div>
+            <div class="hpill warn">Warning &nbsp;2</div>
+            <div class="hpill opp">Opportunity &nbsp;0</div>
+          </div>
+
+          <div class="health-items">
+            <div class="health-item" style="animation-delay:.3s">
+              <div class="hi-title">📉 Profit trend declining</div>
+              <div class="hi-desc">Profit changed by -72.9% compared to the previous period.</div>
+            </div>
+            <div class="health-item" style="animation-delay:.35s">
+              <div class="hi-title">📊 Margin weakening</div>
+              <div class="hi-desc">Margin moved by -53.0% versus the previous period.</div>
+            </div>
+            <div class="health-item" style="animation-delay:.4s">
+              <div class="hi-title">💸 Expenses rising faster than revenue</div>
+              <div class="hi-desc">Expenses grew 100.0% while revenue declined -42.4% in the selected comparison.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /rec-content -->
+
+</div>
+</div><!-- /tab-recommendations -->
+
+
+<!-- ══ PRODUCTS TAB ══ -->
+<div id="tab-products" class="tab-content">
+<div class="page">
+
+  <!-- ── TOP PROFITABLE ── -->
+  <div class="section-head" style="margin-top:0;">Top Profitable Products</div>
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-head" style="margin-bottom:14px;">
+      <div>
+        <div class="card-title">Profit Leaders</div>
+        <div class="card-sub">Winning catalog segments — easiest to protect and scale</div>
+      </div>
+      <span class="badge up" style="font-size:12px;padding:4px 10px;">8 Products</span>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th class="num">SKU</th>
+            <th class="num">Qty</th>
+            <th class="num">Revenue</th>
+            <th class="num">Cost</th>
+            <th class="num">Profit</th>
+            <th class="num">Margin</th>
+            <th class="num">Score</th>
+            <th>Health</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="prod-name">Adobe Acrobat Pro DC 2024 Pre-Activated Lifetime for Mac</td>
+            <td class="num muted">—</td><td class="num">3</td>
+            <td class="num fw">₹900.00</td><td class="num muted">₹300.00</td>
+            <td class="num profit">₹600.00</td>
+            <td class="num"><span class="margin-bar"><span style="width:66.7%"></span></span>66.7%</td>
+            <td class="num"><span class="score-badge s-green">82</span></td>
+            <td><span class="health-tag healthy">Healthy</span></td>
+          </tr>
+          <tr>
+            <td class="prod-name">Adobe Acrobat Pro DC 2024 for Windows – PDF Editor (Pre-Activated)</td>
+            <td class="num muted">—</td><td class="num">3</td>
+            <td class="num fw">₹900.00</td><td class="num muted">₹300.00</td>
+            <td class="num profit">₹600.00</td>
+            <td class="num"><span class="margin-bar"><span style="width:66.7%"></span></span>66.7%</td>
+            <td class="num"><span class="score-badge s-green">82</span></td>
+            <td><span class="health-tag healthy">Healthy</span></td>
+          </tr>
+          <tr>
+            <td class="prod-name">Office 2024 Pro Plus Lifetime LTSC License Key</td>
+            <td class="num muted">—</td><td class="num">2</td>
+            <td class="num fw">₹800.00</td><td class="num muted">₹300.00</td>
+            <td class="num profit">₹500.00</td>
+            <td class="num"><span class="margin-bar"><span style="width:62.5%"></span></span>62.5%</td>
+            <td class="num"><span class="score-badge s-amber">74</span></td>
+            <td><span class="health-tag watch">Watch</span></td>
+          </tr>
+          <tr>
+            <td class="prod-name">Windows 11 Pro OEM License Keys</td>
+            <td class="num muted">—</td><td class="num">3</td>
+            <td class="num fw">₹660.00</td><td class="num muted">₹450.00</td>
+            <td class="num profit">₹210.00</td>
+            <td class="num"><span class="margin-bar m-low"><span style="width:31.8%"></span></span>31.8%</td>
+            <td class="num"><span class="score-badge s-green">75</span></td>
+            <td><span class="health-tag healthy">Healthy</span></td>
+          </tr>
+          <tr>
+            <td class="prod-name">Windows Server 2019 Standard License Key</td>
+            <td class="num muted">—</td><td class="num">1</td>
+            <td class="num fw">₹800.00</td><td class="num muted">₹600.00</td>
+            <td class="num profit warn-profit">₹200.00</td>
+            <td class="num"><span class="margin-bar m-low"><span style="width:25%"></span></span>25.0%</td>
+            <td class="num"><span class="score-badge s-red">65</span></td>
+            <td><span class="health-tag watch">Watch</span></td>
+          </tr>
+          <tr>
+            <td class="prod-name">Adobe Photoshop Premium 2025 Pre-Activated for Windows</td>
+            <td class="num muted">—</td><td class="num">1</td>
+            <td class="num fw">₹300.00</td><td class="num muted">₹100.00</td>
+            <td class="num profit">₹200.00</td>
+            <td class="num"><span class="margin-bar"><span style="width:66.7%"></span></span>66.7%</td>
+            <td class="num"><span class="score-badge s-red">57</span></td>
+            <td><span class="health-tag watch">Watch</span></td>
+          </tr>
+          <tr>
+            <td class="prod-name">Visio Professional 2021 License Key</td>
+            <td class="num muted">—</td><td class="num">1</td>
+            <td class="num fw">₹300.00</td><td class="num muted">₹200.00</td>
+            <td class="num profit warn-profit">₹100.00</td>
+            <td class="num"><span class="margin-bar m-low"><span style="width:33.3%"></span></span>33.3%</td>
+            <td class="num"><span class="score-badge s-red">57</span></td>
+            <td><span class="health-tag watch">Watch</span></td>
+          </tr>
+          <tr>
+            <td class="prod-name">Windows 10 Pro OEM License Keys</td>
+            <td class="num muted">—</td><td class="num">1</td>
+            <td class="num fw">₹250.00</td><td class="num muted">₹150.00</td>
+            <td class="num profit warn-profit">₹100.00</td>
+            <td class="num"><span class="margin-bar m-mid"><span style="width:40%"></span></span>40.0%</td>
+            <td class="num"><span class="score-badge s-red">56</span></td>
+            <td><span class="health-tag watch">Watch</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── TWO COL: Audit + Low Margin ── -->
+  <div style="display:grid;grid-template-columns:320px 1fr;gap:18px;margin-bottom:18px;align-items:start;">
+
+    <!-- Missing Cost Audit -->
+    <div class="card">
+      <div class="card-head" style="margin-bottom:16px;">
+        <div>
+          <div class="card-title">Missing Cost Audit</div>
+          <div class="card-sub">Gaps blocking accurate profit calculations</div>
+        </div>
+      </div>
+      <div class="audit-score-wrap">
+        <div class="audit-score-ring">
+          <svg width="90" height="90" viewBox="0 0 90 90" style="transform:rotate(-90deg)">
+            <circle cx="45" cy="45" r="36" fill="none" stroke="#f1f5f9" stroke-width="7"/>
+            <circle cx="45" cy="45" r="36" fill="none" stroke="#059669" stroke-width="7"
+              stroke-linecap="round"
+              stroke-dasharray="226.2" stroke-dashoffset="0"/>
+          </svg>
+          <div class="audit-score-center">
+            <div style="font-size:18px;font-weight:800;color:var(--text);">100%</div>
+          </div>
+        </div>
+        <div class="audit-label-wrap">
+          <div class="audit-tag green">✔ Complete</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;">Cost completeness across all products</div>
+        </div>
+      </div>
+      <div class="audit-list">
+        <div class="audit-row"><span class="audit-dot green"></span><span>40 products with costs</span><span class="audit-val green">40</span></div>
+        <div class="audit-row"><span class="audit-dot muted"></span><span>0 products missing cost</span><span class="audit-val muted">0</span></div>
+        <div class="audit-row"><span class="audit-dot muted"></span><span>0 zero-cost products</span><span class="audit-val muted">0</span></div>
+        <div class="audit-row"><span class="audit-dot amber"></span><span>2 variations missing cost rows</span><span class="audit-val amber">2</span></div>
+        <div class="audit-row"><span class="audit-dot muted"></span><span>0 incomplete cost rows</span><span class="audit-val muted">0</span></div>
+      </div>
+      <button class="audit-btn">Review Missing Costs →</button>
+    </div>
+
+    <!-- Low Margin Products -->
+    <div class="card">
+      <div class="card-head" style="margin-bottom:14px;">
+        <div>
+          <div class="card-title">Low Margin Products</div>
+          <div class="card-sub">Products under pressure — likely leaking profit</div>
+        </div>
+        <span class="badge dn" style="font-size:12px;padding:4px 10px;">8 Products</span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th class="num">Qty</th>
+              <th class="num">Revenue</th>
+              <th class="num">Cost</th>
+              <th class="num">Profit</th>
+              <th class="num">Margin</th>
+              <th class="num">Score</th>
+              <th>Health</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="prod-name">Windows Server 2019 Standard License Key</td>
+              <td class="num">1</td><td class="num fw">₹800.00</td><td class="num muted">₹600.00</td>
+              <td class="num warn-profit">₹200.00</td>
+              <td class="num"><span class="margin-bar m-low"><span style="width:25%"></span></span>25.0%</td>
+              <td class="num"><span class="score-badge s-red">65</span></td>
+              <td><span class="health-tag watch">Watch</span></td>
+            </tr>
+            <tr>
+              <td class="prod-name">Windows 11 Pro OEM License Keys</td>
+              <td class="num">3</td><td class="num fw">₹660.00</td><td class="num muted">₹450.00</td>
+              <td class="num">₹210.00</td>
+              <td class="num"><span class="margin-bar m-low"><span style="width:31.8%"></span></span>31.8%</td>
+              <td class="num"><span class="score-badge s-green">75</span></td>
+              <td><span class="health-tag healthy">Healthy</span></td>
+            </tr>
+            <tr>
+              <td class="prod-name">Visio Professional 2021 License Key</td>
+              <td class="num">1</td><td class="num fw">₹300.00</td><td class="num muted">₹200.00</td>
+              <td class="num warn-profit">₹100.00</td>
+              <td class="num"><span class="margin-bar m-low"><span style="width:33.3%"></span></span>33.3%</td>
+              <td class="num"><span class="score-badge s-red">57</span></td>
+              <td><span class="health-tag watch">Watch</span></td>
+            </tr>
+            <tr>
+              <td class="prod-name">Windows 10 Pro OEM License Keys</td>
+              <td class="num">1</td><td class="num fw">₹250.00</td><td class="num muted">₹150.00</td>
+              <td class="num warn-profit">₹100.00</td>
+              <td class="num"><span class="margin-bar m-mid"><span style="width:40%"></span></span>40.0%</td>
+              <td class="num"><span class="score-badge s-red">56</span></td>
+              <td><span class="health-tag watch">Watch</span></td>
+            </tr>
+            <tr>
+              <td class="prod-name">Office 2024 Pro Plus Lifetime LTSC License Key</td>
+              <td class="num">2</td><td class="num fw">₹800.00</td><td class="num muted">₹300.00</td>
+              <td class="num profit">₹500.00</td>
+              <td class="num"><span class="margin-bar m-mid"><span style="width:62.5%"></span></span>62.5%</td>
+              <td class="num"><span class="score-badge s-amber">74</span></td>
+              <td><span class="health-tag watch">Watch</span></td>
+            </tr>
+            <tr>
+              <td class="prod-name">Adobe Acrobat Pro DC 2024 Lifetime for Mac</td>
+              <td class="num">3</td><td class="num fw">₹900.00</td><td class="num muted">₹300.00</td>
+              <td class="num profit">₹600.00</td>
+              <td class="num"><span class="margin-bar"><span style="width:66.7%"></span></span>66.7%</td>
+              <td class="num"><span class="score-badge s-green">82</span></td>
+              <td><span class="health-tag healthy">Healthy</span></td>
+            </tr>
+            <tr>
+              <td class="prod-name">Adobe Acrobat Pro DC 2024 for Windows (Pre-Activated)</td>
+              <td class="num">3</td><td class="num fw">₹900.00</td><td class="num muted">₹300.00</td>
+              <td class="num profit">₹600.00</td>
+              <td class="num"><span class="margin-bar"><span style="width:66.7%"></span></span>66.7%</td>
+              <td class="num"><span class="score-badge s-green">82</span></td>
+              <td><span class="health-tag healthy">Healthy</span></td>
+            </tr>
+            <tr>
+              <td class="prod-name">Adobe Photoshop Premium 2025 Pre-Activated for Windows</td>
+              <td class="num">1</td><td class="num fw">₹300.00</td><td class="num muted">₹100.00</td>
+              <td class="num profit">₹200.00</td>
+              <td class="num"><span class="margin-bar"><span style="width:66.7%"></span></span>66.7%</td>
+              <td class="num"><span class="score-badge s-red">57</span></td>
+              <td><span class="health-tag watch">Watch</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── CATEGORY HEATMAP ── -->
+  <div class="section-head">Category Margin Heatmap</div>
+  <div class="card">
+    <div class="card-head" style="margin-bottom:16px;">
+      <div>
+        <div class="card-title">Category Performance</div>
+        <div class="card-sub">Premium heatmap cards for quick category scanning</div>
+      </div>
+    </div>
+    <div class="heatmap-grid">
+
+      <div class="hmap-card hmap-high">
+        <div class="hmap-icon">🎨</div>
+        <div class="hmap-name">Adobe Products</div>
+        <div class="hmap-margin">66.7%</div>
+        <div class="hmap-bar-wrap"><div class="hmap-bar" style="width:66.7%;background:var(--green);"></div></div>
+        <div class="hmap-stats">
+          <span>₹1,050 rev</span><span>₹700 profit</span>
+        </div>
+      </div>
+
+      <div class="hmap-card hmap-high">
+        <div class="hmap-icon">💿</div>
+        <div class="hmap-name">Adobe Preactivated Software</div>
+        <div class="hmap-margin">66.7%</div>
+        <div class="hmap-bar-wrap"><div class="hmap-bar" style="width:66.7%;background:var(--green);"></div></div>
+        <div class="hmap-stats">
+          <span>₹1,050 rev</span><span>₹700 profit</span>
+        </div>
+      </div>
+
+      <div class="hmap-card hmap-mid">
+        <div class="hmap-icon">🏢</div>
+        <div class="hmap-name">Office LTSC License Keys</div>
+        <div class="hmap-margin">62.5%</div>
+        <div class="hmap-bar-wrap"><div class="hmap-bar" style="width:62.5%;background:#16a34a;"></div></div>
+        <div class="hmap-stats">
+          <span>₹267 rev</span><span>₹167 profit</span>
+        </div>
+      </div>
+
+      <div class="hmap-card hmap-mid">
+        <div class="hmap-icon">📋</div>
+        <div class="hmap-name">Office Retail License Keys</div>
+        <div class="hmap-margin">52.0%</div>
+        <div class="hmap-bar-wrap"><div class="hmap-bar" style="width:52%;background:var(--cyan);"></div></div>
+        <div class="hmap-stats">
+          <span>₹417 rev</span><span>₹217 profit</span>
+        </div>
+      </div>
+
+      <div class="hmap-card hmap-mid">
+        <div class="hmap-icon">📦</div>
+        <div class="hmap-name">Office Products</div>
+        <div class="hmap-margin">52.0%</div>
+        <div class="hmap-bar-wrap"><div class="hmap-bar" style="width:52%;background:var(--cyan);"></div></div>
+        <div class="hmap-stats">
+          <span>₹417 rev</span><span>₹217 profit</span>
+        </div>
+      </div>
+
+      <div class="hmap-card hmap-low">
+        <div class="hmap-icon">🖥️</div>
+        <div class="hmap-name">Windows OEM Keys</div>
+        <div class="hmap-margin">34.1%</div>
+        <div class="hmap-bar-wrap"><div class="hmap-bar" style="width:34.1%;background:var(--amber);"></div></div>
+        <div class="hmap-stats">
+          <span>₹455 rev</span><span>₹155 profit</span>
+        </div>
+      </div>
+
+      <div class="hmap-card hmap-low">
+        <div class="hmap-icon">🪟</div>
+        <div class="hmap-name">Windows</div>
+        <div class="hmap-margin">29.8%</div>
+        <div class="hmap-bar-wrap"><div class="hmap-bar" style="width:29.8%;background:var(--orange);"></div></div>
+        <div class="hmap-stats">
+          <span>₹855 rev</span><span>₹255 profit</span>
+        </div>
+      </div>
+
+      <div class="hmap-card hmap-critical">
+        <div class="hmap-icon">🖧</div>
+        <div class="hmap-name">Windows Server Keys</div>
+        <div class="hmap-margin">25.0%</div>
+        <div class="hmap-bar-wrap"><div class="hmap-bar" style="width:25%;background:var(--red);"></div></div>
+        <div class="hmap-stats">
+          <span>₹400 rev</span><span>₹100 profit</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div><!-- /tab-products -->
+
+
+<!-- ══ PLANNING TAB ══ -->
+<div id="tab-planning" class="tab-content">
+<div class="page">
+
+  <!-- ── PROFIT GOALS ── -->
+  <div class="section-head" style="margin-top:0;">Profit Goals</div>
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-head" style="margin-bottom:20px;">
+      <div>
+        <div class="card-title">Goal Tracker</div>
+        <div class="card-sub">Goals stay visible without competing with executive metrics</div>
+      </div>
+      <span class="badge dn" style="font-size:12px;padding:4px 11px;">3 Behind</span>
+    </div>
+
+    <!-- Revenue Goal -->
+    <div class="goal-row">
+      <div class="goal-meta">
+        <div class="goal-label">Revenue Goal</div>
+        <span class="goal-status behind">Behind</span>
+      </div>
+      <div class="goal-figures">
+        <span class="goal-actual">₹4,910.00</span>
+        <span class="goal-sep">/</span>
+        <span class="goal-target">₹25,403.23</span>
+        <span class="goal-pct">19.3%</span>
+      </div>
+      <div class="goal-track-wrap">
+        <div class="goal-track">
+          <div class="goal-fill gf-red" style="width:19.3%"></div>
+          <div class="goal-milestone" style="left:100%"></div>
+        </div>
+        <div class="goal-track-labels">
+          <span>₹0</span><span>₹25,403.23</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="goal-divider"></div>
+
+    <!-- Profit Goal -->
+    <div class="goal-row">
+      <div class="goal-meta">
+        <div class="goal-label">Profit Goal</div>
+        <span class="goal-status behind">Behind</span>
+      </div>
+      <div class="goal-figures">
+        <span class="goal-actual">₹2,308.00</span>
+        <span class="goal-sep">/</span>
+        <span class="goal-target">₹12,193.55</span>
+        <span class="goal-pct">18.9%</span>
+      </div>
+      <div class="goal-track-wrap">
+        <div class="goal-track">
+          <div class="goal-fill gf-amber" style="width:18.9%"></div>
+        </div>
+        <div class="goal-track-labels">
+          <span>₹0</span><span>₹12,193.55</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="goal-divider"></div>
+
+    <!-- Margin Goal -->
+    <div class="goal-row">
+      <div class="goal-meta">
+        <div class="goal-label">Margin Goal</div>
+        <span class="goal-status behind">Behind</span>
+      </div>
+      <div class="goal-figures">
+        <span class="goal-actual">47.0%</span>
+        <span class="goal-sep">/</span>
+        <span class="goal-target">16,000.0%</span>
+        <span class="goal-pct">0.3%</span>
+      </div>
+      <div class="goal-track-wrap">
+        <div class="goal-track">
+          <div class="goal-fill gf-red" style="width:0.3%"></div>
+        </div>
+        <div class="goal-track-labels">
+          <span>0%</span><span>16,000%</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── BUDGET vs ACTUAL ── -->
+  <div class="section-head">Budget vs Actual</div>
+  <div class="card" style="margin-bottom:18px;">
+    <div class="card-head" style="margin-bottom:18px;">
+      <div>
+        <div class="card-title">Monthly Pressure Areas</div>
+        <div class="card-sub">Over-budget and under-budget categories at a glance</div>
+      </div>
+    </div>
+
+    <div class="bva-row">
+      <div class="bva-left">
+        <div class="bva-name">Advertising</div>
+        <div class="bva-amounts">₹200.00 actual &nbsp;/&nbsp; ₹0.00 budget</div>
+      </div>
+      <div class="bva-bar-area">
+        <div class="bva-track">
+          <div class="bva-fill bva-over" style="width:100%"></div>
+        </div>
+        <div class="bva-track-labels">
+          <span>₹0</span><span>₹200</span>
+        </div>
+      </div>
+      <div class="bva-tag over">Over budget ₹200.00</div>
+    </div>
+
+    <div class="bva-divider"></div>
+
+    <div class="bva-row">
+      <div class="bva-left">
+        <div class="bva-name">Packaging</div>
+        <div class="bva-amounts">₹2.00 actual &nbsp;/&nbsp; ₹0.00 budget</div>
+      </div>
+      <div class="bva-bar-area">
+        <div class="bva-track">
+          <div class="bva-fill bva-over" style="width:100%"></div>
+        </div>
+        <div class="bva-track-labels">
+          <span>₹0</span><span>₹2</span>
+        </div>
+      </div>
+      <div class="bva-tag over">Over budget ₹2.00</div>
+    </div>
+
+  </div>
+
+  <!-- ── TWO COL: Notes + Actions ── -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+
+    <!-- Dashboard Notes -->
+    <div class="card">
+      <div class="card-head" style="margin-bottom:16px;">
+        <div>
+          <div class="card-title">Dashboard Notes</div>
+          <div class="card-sub">Color-coded notes visible here and on WordPress dashboard</div>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button class="note-action-btn blue">+ Add Note</button>
+          <button class="note-action-btn green">+ Add Expense</button>
+        </div>
+      </div>
+
+      <!-- Note 1 – Alert Removed (active) -->
+      <div class="note-card note-alert">
+        <div class="note-header">
+          <div class="note-tags">
+            <span class="ntag alert">Alert</span>
+            <span class="ntag removed">Removed</span>
+            <span class="ntag email">Email</span>
+          </div>
+          <span class="note-badge active-note">Active</span>
+        </div>
+        <div class="note-title">Note 1</div>
+        <div class="note-date">📅 Mar 16, 2026 – Mar 17, 2026</div>
+        <div class="note-desc">Active notes appear on this overview page and the main WordPress dashboard while the effective date window is valid.</div>
+      </div>
+
+      <!-- Note 2 – Alert Removed (active) -->
+      <div class="note-card note-alert" style="margin-top:10px;">
+        <div class="note-header">
+          <div class="note-tags">
+            <span class="ntag alert">Alert</span>
+            <span class="ntag removed">Removed</span>
+            <span class="ntag email">Email</span>
+          </div>
+          <span class="note-badge active-note">Active</span>
+        </div>
+        <div class="note-title">Note 1</div>
+        <div class="note-date">📅 Mar 16, 2026 – Mar 17, 2026</div>
+        <div class="note-desc">Active notes appear on this overview page and the main WordPress dashboard while the effective date window is valid.</div>
+      </div>
+
+      <!-- Note 3 – Alert only (active) -->
+      <div class="note-card note-info" style="margin-top:10px;">
+        <div class="note-header">
+          <div class="note-tags">
+            <span class="ntag alert">Alert</span>
+            <span class="ntag email">Email</span>
+          </div>
+          <span class="note-badge active-note">Active</span>
+        </div>
+        <div class="note-title">Note 1</div>
+        <div class="note-date">📅 Mar 16, 2026 – Mar 17, 2026</div>
+        <div class="note-desc">Active notes appear on this overview page and the main WordPress dashboard while the effective date window is valid.</div>
+      </div>
+
+      <!-- Note 4 – Update Ended -->
+      <div class="note-card note-ended" style="margin-top:10px;">
+        <div class="note-header">
+          <div class="note-tags">
+            <span class="ntag update">Update</span>
+          </div>
+          <span class="note-badge ended-note">Ended</span>
+        </div>
+        <div class="note-title">Dashboard Notes</div>
+        <div class="note-date">📅 Mar 12, 2026 – Mar 16, 2026</div>
+        <div class="note-desc">Internal annotations for campaigns, supplier changes, and business events.</div>
+      </div>
+
+    </div>
+
+    <!-- Next Actions -->
+    <div class="card">
+      <div class="card-head" style="margin-bottom:16px;">
+        <div>
+          <div class="card-title">Next Actions</div>
+          <div class="card-sub">Compact planning prompts — clear movement forward</div>
+        </div>
+        <span class="badge dn" style="font-size:12px;padding:4px 10px;">4 Open</span>
+      </div>
+
+      <div class="action-item ai-warn">
+        <div class="ai-num">01</div>
+        <div class="ai-body">
+          <div class="ai-head">
+            <span class="ai-title">2 variations are missing cost rows</span>
+            <span class="ai-tag warning">Warning</span>
+          </div>
+          <div class="ai-desc">Variation-specific costs improve profit accuracy when options have different cost structures. Add missing variation rows where needed.</div>
+          <button class="ai-btn">Review Variations →</button>
+        </div>
+      </div>
+
+      <div class="action-item ai-action">
+        <div class="ai-num">02</div>
+        <div class="ai-body">
+          <div class="ai-head">
+            <span class="ai-title">Net profit dropped versus the previous period</span>
+            <span class="ai-tag actionable">Actionable</span>
+          </div>
+          <div class="ai-desc">Profit is lower than the immediately preceding period. Review product mix, expense changes, and refund spikes for the selected dates.</div>
+        </div>
+      </div>
+
+      <div class="action-item ai-action">
+        <div class="ai-num">03</div>
+        <div class="ai-body">
+          <div class="ai-head">
+            <span class="ai-title">Margin dropped significantly versus the previous period</span>
+            <span class="ai-tag actionable">Actionable</span>
+          </div>
+          <div class="ai-desc">Revenue can grow while profit quality declines. Review low-margin products, refunds, and expense changes for the selected range.</div>
+        </div>
+      </div>
+
+      <div class="action-item ai-warn" style="border-bottom:none;">
+        <div class="ai-num">04</div>
+        <div class="ai-body">
+          <div class="ai-head">
+            <span class="ai-title">Advertising is over budget</span>
+            <span class="ai-tag warning">Warning</span>
+          </div>
+          <div class="ai-desc">This category is over budget by ₹200.00 in the selected period.</div>
+          <button class="ai-btn">Review Expenses →</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ── ANALYTICS CHART: Goals Progress over Time ── -->
+  <div class="section-head">Goal Analytics</div>
+  <div class="card">
+    <div class="card-head" style="margin-bottom:16px;">
+      <div>
+        <div class="card-title">Revenue vs Profit Progress Over Period</div>
+        <div class="card-sub">Track how actual performance trended against goals across the date range</div>
+        <div class="legend" style="margin-top:8px;">
+          <div class="leg"><div class="leg-dot" style="background:#2563eb;"></div>Revenue Actual</div>
+          <div class="leg"><div class="leg-dot" style="background:#7c3aed;"></div>Net Profit Actual</div>
+          <div class="leg"><div class="leg-dot" style="background:#dc2626;border:2px dashed #dc2626;background:transparent;width:18px;height:2px;border-radius:0;"></div>Revenue Goal</div>
+          <div class="leg"><div class="leg-dot" style="background:#059669;border:2px dashed #059669;background:transparent;width:18px;height:2px;border-radius:0;"></div>Profit Goal</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+        <div style="font-size:11px;font-weight:600;color:var(--muted);">Period Progress</div>
+        <div style="font-size:20px;font-weight:800;color:var(--red);">19.3%</div>
+      </div>
+    </div>
+    <canvas id="planChart" height="130"></canvas>
+  </div>
+
+</div>
+</div><!-- /tab-planning -->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+/* ── TAB SWITCHING ── */
+let recLoaded = false;
+
+function switchTab(name, btn) {
+  // Toggle nav button
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Toggle content
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+
+  // Recommendations: AJAX-style load
+  if (name === 'recommendations' && !recLoaded) {
+    loadRecommendations();
+  }
+}
+
+function loadRecommendations() {
+  const skeleton = document.getElementById('rec-skeleton');
+  const content  = document.getElementById('rec-content');
+
+  // Simulate network delay (600–1000ms)
+  const delay = 650 + Math.random() * 350;
+
+  setTimeout(() => {
+    // Fade out skeleton
+    skeleton.style.transition = 'opacity .3s';
+    skeleton.style.opacity = '0';
+
+    setTimeout(() => {
+      skeleton.style.display = 'none';
+      content.style.display = 'block';
+      content.style.opacity = '0';
+      content.style.transition = 'opacity .4s';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { content.style.opacity = '1'; });
+      });
+
+      // Animate score ring + counter
+      animateScore(64);
+      recLoaded = true;
+    }, 300);
+  }, delay);
+}
+
+function animateScore(target) {
+  const circle = document.getElementById('scoreCircle');
+  const numEl  = document.getElementById('scoreNum');
+  const circumference = 339.3;
+  const offset = circumference - (target / 100) * circumference;
+
+  // Small delay so the tab is visible first
+  setTimeout(() => {
+    circle.style.strokeDashoffset = offset;
+
+    // Count-up number
+    let current = 0;
+    const step = Math.ceil(target / 40);
+    const timer = setInterval(() => {
+      current = Math.min(current + step, target);
+      numEl.textContent = current;
+      if (current >= target) clearInterval(timer);
+    }, 30);
+  }, 100);
+}
+
+/* ── CHARTS ── */
+const labels = ['Feb 15','Feb 19','Feb 22','Feb 26','Mar 1','Mar 5','Mar 9','Mar 12','Mar 15','Mar 16'];
+Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+Chart.defaults.font.size = 11;
+
+new Chart(document.getElementById('revChart'), {
+  type:'line',
+  data:{
+    labels,
+    datasets:[
+      { label:'Revenue', data:[320,480,200,900,150,600,280,420,900,40],
+        borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,.07)',
+        borderWidth:2, fill:true, tension:.42,
+        pointRadius:3, pointBackgroundColor:'#2563eb', pointBorderColor:'#fff', pointBorderWidth:1.5 },
+      { label:'Net Profit', data:[140,210,85,420,60,270,120,190,420,18],
+        borderColor:'#059669', backgroundColor:'rgba(5,150,105,.06)',
+        borderWidth:2, fill:true, tension:.42,
+        pointRadius:3, pointBackgroundColor:'#059669', pointBorderColor:'#fff', pointBorderWidth:1.5 }
+    ]
+  },
+  options:{
+    responsive:true,
+    plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false} },
+    scales:{
+      x:{ grid:{display:false}, ticks:{color:'#9ca3af',font:{size:10}} },
+      y:{ grid:{color:'#f1f5f9'}, ticks:{color:'#9ca3af',font:{size:10}, callback:v=>'₹'+v} }
+    }
+  }
+});
+
+new Chart(document.getElementById('margChart'), {
+  type:'line',
+  data:{
+    labels,
+    datasets:[{ label:'Margin %', data:[43,44,42,47,40,45,43,44,47,45],
+      borderColor:'#7c3aed', backgroundColor:'rgba(124,58,237,.07)',
+      borderWidth:2, fill:true, tension:.42,
+      pointRadius:3, pointBackgroundColor:'#7c3aed', pointBorderColor:'#fff', pointBorderWidth:1.5 }]
+  },
+  options:{
+    responsive:true,
+    plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.y+'%'}} },
+    scales:{
+      x:{ grid:{display:false}, ticks:{color:'#9ca3af',font:{size:10}} },
+      y:{ min:30, max:60, grid:{color:'#f1f5f9'}, ticks:{color:'#9ca3af',font:{size:10}, callback:v=>v+'%'} }
+    }
+  }
+});
+
+// ── PLANNING CHART ──
+const planLabels = ['Feb 15','Feb 19','Feb 22','Feb 26','Mar 1','Mar 5','Mar 9','Mar 12','Mar 15','Mar 16'];
+
+// Goal lines: flat horizontal reference
+const revenueGoal = Array(10).fill(25403.23);
+const profitGoal  = Array(10).fill(12193.55);
+
+const planChartEl = document.getElementById('planChart');
+if (planChartEl) {
+  new Chart(planChartEl, {
+    type:'line',
+    data:{
+      labels: planLabels,
+      datasets:[
+        {
+          label:'Revenue Actual',
+          data:[320,800,1000,1900,2050,2650,2930,3350,4250,4910],
+          borderColor:'#2563eb', backgroundColor:'rgba(37,99,235,.07)',
+          borderWidth:2.5, fill:true, tension:.42,
+          pointRadius:3, pointBackgroundColor:'#2563eb', pointBorderColor:'#fff', pointBorderWidth:1.5
+        },
+        {
+          label:'Net Profit Actual',
+          data:[140,350,440,840,905,1175,1295,1485,1890,2308],
+          borderColor:'#7c3aed', backgroundColor:'rgba(124,58,237,.05)',
+          borderWidth:2.5, fill:true, tension:.42,
+          pointRadius:3, pointBackgroundColor:'#7c3aed', pointBorderColor:'#fff', pointBorderWidth:1.5
+        },
+        {
+          label:'Revenue Goal',
+          data: revenueGoal,
+          borderColor:'#dc2626', backgroundColor:'transparent',
+          borderWidth:1.5, borderDash:[6,4], fill:false, tension:0,
+          pointRadius:0
+        },
+        {
+          label:'Profit Goal',
+          data: profitGoal,
+          borderColor:'#059669', backgroundColor:'transparent',
+          borderWidth:1.5, borderDash:[6,4], fill:false, tension:0,
+          pointRadius:0
+        }
+      ]
+    },
+    options:{
+      responsive:true,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ display:true, position:'bottom',
+          labels:{ font:{size:11,family:"'Plus Jakarta Sans',sans-serif"}, boxWidth:14, padding:16, color:'#6b7280' }
+        },
+        tooltip:{
+          callbacks:{
+            label: ctx => {
+              const v = ctx.parsed.y;
+              return ` ${ctx.dataset.label}: ₹${v.toLocaleString('en-IN')}`;
+            }
+          }
+        }
+      },
+      scales:{
+        x:{ grid:{display:false}, ticks:{color:'#9ca3af', font:{size:10}} },
+        y:{
+          grid:{color:'#f1f5f9'},
+          ticks:{color:'#9ca3af', font:{size:10}, callback: v => '₹'+v.toLocaleString('en-IN')}
+        }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
