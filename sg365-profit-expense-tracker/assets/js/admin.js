@@ -4,6 +4,13 @@ window.WCPI = window.WCPI || {};
         return $('<div>').text(value == null ? '' : value).html();
     }
 
+    function stripTags(value){
+        if(value == null){
+            return '';
+        }
+        return $('<div>').html(String(value)).text();
+    }
+
     function currencyFormatter(){
         var currency = (window.wcpiAdmin && wcpiAdmin.currency) || {};
         if(window.Intl && currency.code){
@@ -195,6 +202,18 @@ window.WCPI = window.WCPI || {};
         return '<span class="wcpi-trend-pill wcpi-trend-' + esc(tone) + '">' + (trend.direction === 'down' ? '&darr;' : '&uarr;') + ' ' + esc((trend.percentage >= 0 ? '+' : '') + Number(trend.percentage || 0).toFixed(1)) + '%</span>';
     }
 
+    function kpiTrendMarkup(trend, inverse){
+        if(!trend){
+            return '<span class="badge ne">—</span>';
+        }
+        var isDown = trend.direction === 'down';
+        var percentage = Number(trend.percentage || 0).toFixed(1) + '%';
+        var positive = inverse ? isDown : !isDown;
+        var tone = positive ? 'up' : 'dn';
+        var arrow = isDown ? '↓' : '↑';
+        return '<span class="badge ' + tone + '">' + arrow + ' ' + esc(percentage) + '</span>';
+    }
+
     function recommendationTone(item){
         var type = item && (item.type || item.severity || 'info');
         if(type === 'danger' || type === 'critical'){
@@ -347,7 +366,7 @@ window.WCPI = window.WCPI || {};
     };
 
     WCPI.renderTable = function(rows){
-        var html = '<div class="wcpi-table-wrap"><table class="widefat wcpi-table"><thead><tr><th>Product</th><th>SKU</th><th>Qty</th><th>Revenue</th><th>Cost</th><th>Profit</th><th>Margin %</th><th>Health</th></tr></thead><tbody>';
+        var html = '<div class="wcpi-table-wrap"><table class="widefat wcpi-table dtbl"><thead><tr><th>Product</th><th>SKU</th><th>Qty</th><th>Revenue</th><th>Cost</th><th>Profit</th><th>Margin %</th><th>Health</th></tr></thead><tbody>';
         if(!rows || !rows.length){
             html += '<tr><td colspan="8"><div class="wcpi-empty-inline">' + esc(wcpiAdmin.i18n.noData) + '</div></td></tr>';
         } else {
@@ -371,7 +390,7 @@ window.WCPI = window.WCPI || {};
     };
 
     WCPI.renderSummaryTable = function(rows){
-        var html = '<div class="wcpi-table-wrap"><table class="widefat wcpi-table"><thead><tr><th>Date</th><th>Orders</th><th>Items</th><th>Revenue</th><th>Expenses</th><th>Net Profit</th><th>Margin %</th></tr></thead><tbody>';
+        var html = '<div class="wcpi-table-wrap"><table class="widefat wcpi-table dtbl"><thead><tr><th>Date</th><th>Orders</th><th>Items</th><th>Revenue</th><th>Expenses</th><th>Net Profit</th><th>Margin %</th></tr></thead><tbody>';
         if(!rows || !rows.length){
             html += '<tr><td colspan="7"><div class="wcpi-empty-inline">' + esc(wcpiAdmin.i18n.noData) + '</div></td></tr>';
         } else {
@@ -392,7 +411,7 @@ window.WCPI = window.WCPI || {};
     };
 
     WCPI.renderCategoryTable = function(rows){
-        var html = '<div class="wcpi-table-wrap"><table class="widefat wcpi-table"><thead><tr><th>Category</th><th>Qty Sold</th><th>Revenue</th><th>Cost</th><th>Profit</th><th>Margin %</th></tr></thead><tbody>';
+        var html = '<div class="wcpi-table-wrap"><table class="widefat wcpi-table dtbl"><thead><tr><th>Category</th><th>Qty Sold</th><th>Revenue</th><th>Cost</th><th>Profit</th><th>Margin %</th></tr></thead><tbody>';
         if(!rows || !rows.length){
             html += '<tr><td colspan="6"><div class="wcpi-empty-inline">' + esc(wcpiAdmin.i18n.noData) + '</div></td></tr>';
         } else {
@@ -437,26 +456,25 @@ window.WCPI = window.WCPI || {};
             return '<div class="wcpi-empty-inline">' + esc(wcpiAdmin.i18n.noData) + '</div>';
         }
 
-        var primary = [
-            { label: 'Revenue', value: money(payload.revenue), trend: payload.comparison ? payload.comparison.revenue : null, helper: 'Top-line sales for the selected range' },
-            { label: 'Net Profit', value: money(payload.net_profit), trend: payload.comparison ? payload.comparison.net_profit : null, helper: 'After product costs and expenses' },
-            { label: 'Expenses', value: money(payload.expenses), trend: payload.comparison ? payload.comparison.expenses : null, helper: 'Tracked operating spend', inverse: true },
-            { label: 'Margin %', value: percent(payload.margin_percent), trend: payload.comparison ? payload.comparison.margin_percent : null, helper: 'Net profit quality' },
-            { label: 'Orders', value: numberValue(payload.orders_count, 0), trend: payload.comparison ? payload.comparison.orders_count : null, helper: 'Paid and processing orders' },
-            { label: 'Refunds', value: money(payload.refunds_total), trend: payload.comparison ? payload.comparison.refunds_total : null, helper: 'Refund impact this range', inverse: true }
+        var top = [
+            { label: 'Revenue', value: money(payload.revenue), trend: payload.comparison ? payload.comparison.revenue : null, helper: 'Top-line sales for selected range', tone: 'b' },
+            { label: 'Gross Profit', value: money(payload.gross_profit), trend: payload.comparison ? payload.comparison.gross_profit : null, helper: 'Before operating expenses', tone: 'g' },
+            { label: 'Net Profit', value: money(payload.net_profit), trend: payload.comparison ? payload.comparison.net_profit : null, helper: 'After product costs and expenses', tone: 'v' }
         ];
-        var secondary = [
-            { label: 'Average Order Value', value: money(payload.aov), trend: payload.comparison ? payload.comparison.aov : null, helper: 'Average revenue per order' },
-            { label: 'Units Sold', value: numberValue(payload.units_sold, 0), trend: payload.comparison ? payload.comparison.units_sold : null, helper: 'Total units sold' },
-            { label: 'Gross Profit', value: money(payload.gross_profit), trend: payload.comparison ? payload.comparison.gross_profit : null, helper: 'Before operating expenses' }
+        var second = [
+            { label: 'Expenses', value: money(payload.expenses), trend: payload.comparison ? payload.comparison.expenses : null, helper: 'Tracked operating spend', tone: 'r', inverse: true, size: 'sm' },
+            { label: 'Orders', value: numberValue(payload.orders_count, 0), trend: payload.comparison ? payload.comparison.orders_count : null, helper: 'Paid & processing', tone: 'a', size: 'sm' },
+            { label: 'Refunds', value: money(payload.refunds_total), trend: payload.comparison ? payload.comparison.refunds_total : null, helper: 'Refund impact this range', tone: 'g', inverse: true, size: 'sm' },
+            { label: 'Avg Order Val', value: money(payload.aov), trend: payload.comparison ? payload.comparison.aov : null, helper: 'Per order average', tone: 'c', size: 'md' },
+            { label: 'Units Sold', value: numberValue(payload.units_sold, 0), trend: payload.comparison ? payload.comparison.units_sold : null, helper: 'Total units sold', tone: 'ro', size: 'sm' }
         ];
 
-        function cardMarkup(card, accent){
-            return '<section class="wcpi-stat-card ' + accent + '"><span class="wcpi-stat-label">' + esc(card.label) + '</span><strong class="wcpi-stat-value">' + esc(card.value) + '</strong>' + trendMarkup(card.trend, card.inverse) + '<span class="wcpi-stat-helper">' + esc(card.helper || '') + '</span></section>';
+        function cardMarkup(card){
+            return '<section class="kpi ' + esc(card.tone || 'b') + '"><div class="kpi-top"><div class="kpi-label">' + esc(card.label) + '</div></div><div class="kpi-value ' + esc(card.size || '') + '">' + esc(stripTags(card.value)) + '</div>' + kpiTrendMarkup(card.trend, card.inverse) + '<div class="kpi-desc">' + esc(card.helper || '') + '</div></section>';
         }
 
-        return '<div class="wcpi-stat-grid wcpi-stat-grid-6 wcpi-primary-stats">' + primary.map(function(card){ return cardMarkup(card, 'wcpi-card-primary'); }).join('') + '</div>' +
-            '<div class="wcpi-stat-grid wcpi-stat-grid-3 wcpi-secondary-stats">' + secondary.map(function(card){ return cardMarkup(card, 'wcpi-card-secondary'); }).join('') + '</div>';
+        return '<div class="wcpi-kpi-row">' + top.map(cardMarkup).join('') + '</div>' +
+            '<div class="wcpi-kpi-row-2">' + second.map(cardMarkup).join('') + '</div>';
     };
 
     WCPI.renderGoals = function(goals){
@@ -488,10 +506,10 @@ window.WCPI = window.WCPI || {};
         }
 
         var items = [];
-        if(highlights.best_sales_day){ items.push({ label: 'Best Sales Day', value: highlights.best_sales_day.summary_date || '', meta: money(highlights.best_sales_day.gross_revenue) }); }
+        if(highlights.best_sales_day){ items.push({ label: 'Best Sales Day', value: highlights.best_sales_day.summary_date || '', meta: stripTags(money(highlights.best_sales_day.gross_revenue)) }); }
         if(highlights.highest_profit_day){ items.push({ label: 'Highest Profit Day', value: highlights.highest_profit_day.summary_date || '', meta: money(highlights.highest_profit_day.net_profit) }); }
-        if(highlights.top_category){ items.push({ label: 'Top Category', value: highlights.top_category.category || '', meta: money(highlights.top_category.profit) }); }
-        if(highlights.top_product){ items.push({ label: 'Top Product', value: highlights.top_product.name || '', meta: money(highlights.top_product.profit) }); }
+        if(highlights.top_category){ items.push({ label: 'Category Leader', value: highlights.top_category.category || '', meta: stripTags(money(highlights.top_category.profit)) }); }
+        if(highlights.top_product){ items.push({ label: 'Top Product', value: highlights.top_product.name || '', meta: stripTags(money(highlights.top_product.profit)) }); }
         if(highlights.worst_margin_product){ items.push({ label: 'Worst Margin Product', value: highlights.worst_margin_product.name || '', meta: percent(highlights.worst_margin_product.margin_percent) }); }
 
         if(!items.length){
