@@ -237,8 +237,9 @@
         summary += '<div class="wcpi-charts-bot">';
         summary += '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Budget Focus</h2><p>Over-budget categories are promoted first so attention is obvious.</p></div></div>' + WCPI.renderBudgetVsActual((payload.budget_vs_actual || []).slice(0, 5)) + '</section>';
         summary += '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Profit Waterfall</h2><p>A clean bridge from revenue to final net profit.</p></div></div>' + renderWaterfall(payload) + '<div class="wcpi-mini-card-grid">' + [
-            highlights.best_sales_day ? '<div class="wcpi-mini-card"><span class="wcpi-mini-label">Top Day</span><strong>' + WCPI.esc(highlights.best_sales_day.summary_date || '') + '</strong><small>' + WCPI.esc(cleanText(WCPI.money(highlights.best_sales_day.gross_revenue || 0))) + '</small></div>' : '',
-            highlights.top_product ? '<div class="wcpi-mini-card"><span class="wcpi-mini-label">Top Product</span><strong>' + WCPI.esc(highlights.top_product.name || '') + '</strong><small>' + WCPI.esc(cleanText(WCPI.money(highlights.top_product.profit || 0))) + '</small></div>' : ''
+            highlights.best_sales_day ? '<div class="wcpi-mini-card"><span class="wcpi-mini-label">Best Day</span><strong>' + WCPI.esc(highlights.best_sales_day.summary_date || '') + '</strong><small>' + WCPI.esc(cleanText(WCPI.money(highlights.best_sales_day.gross_revenue || 0))) + '</small></div>' : '',
+            highlights.top_product ? '<div class="wcpi-mini-card"><span class="wcpi-mini-label">Top Product</span><strong>' + WCPI.esc(highlights.top_product.name || '') + '</strong><small>' + WCPI.esc(cleanText(WCPI.money(highlights.top_product.profit || 0))) + '</small></div>' : '',
+            highlights.top_category ? '<div class="wcpi-mini-card"><span class="wcpi-mini-label">Category Leader</span><strong>' + WCPI.esc(cleanText(highlights.top_category.category || '')) + '</strong><small>' + WCPI.esc(cleanText(WCPI.money(highlights.top_category.profit || 0))) + '</small></div>' : ''
         ].join('') + '</div></section>';
         summary += '</div>';
 
