@@ -252,43 +252,53 @@
         var summary = recommendationSummary(items);
         var list = items.length ? items : trend;
         var priority = list.slice(0, 2);
-        var improvements = list.slice(2, 5);
-        var actionCounts = '<div class="wcpi-action-counts"><span class="wcpi-badge wcpi-badge-danger">Critical ' + summary.counts.alert + '</span><span class="wcpi-badge wcpi-badge-warning">Warning ' + summary.counts.warning + '</span><span class="wcpi-badge wcpi-badge-success">Opportunity ' + summary.counts.success + '</span></div>';
+        var improvements = list.slice(2, 6);
+
         var cardMarkup = function(item){
             var tone = (item.type === 'danger' || item.severity === 'critical') ? 'alert' : (item.type === 'warning' ? 'warning' : (item.type === 'success' || item.type === 'opportunity' ? 'success' : 'info'));
-            var cta = item.cta_url ? '<a class="button button-small" href="' + WCPI.esc(item.cta_url) + '">' + WCPI.esc(item.cta_label || 'Open') + '</a>' : '<span class="button button-small button-disabled">Review</span>';
-            return '<article class="wcpi-recommendation-card wcpi-rec-' + WCPI.esc(tone) + '"><div class="wcpi-note-head"><strong>' + WCPI.esc(item.title) + '</strong><span class="wcpi-badge wcpi-badge-' + (tone === 'alert' ? 'danger' : (tone === 'warning' ? 'warning' : 'success')) + '">' + WCPI.esc(tone === 'alert' ? 'Critical' : (tone === 'warning' ? 'Warning' : 'Actionable')) + '</span></div><p>' + WCPI.esc(item.body) + '</p><div class="wcpi-card-actions">' + cta + '<span class="dashicons dashicons-arrow-right-alt2"></span></div></article>';
+            var badge = tone === 'alert' ? 'Critical' : (tone === 'warning' ? 'Warning' : (tone === 'success' ? 'Opportunity' : 'Actionable'));
+            var cta = item.cta_url ? '<a class="button button-small" href="' + WCPI.esc(item.cta_url) + '">' + WCPI.esc(item.cta_label || 'Review') + '</a>' : '<span class="button button-small button-disabled">Review</span>';
+            return '<article class="wcpi-recommendation-card wcpi-rec-' + WCPI.esc(tone) + '"><div class="wcpi-note-head"><strong>' + WCPI.esc(item.title) + '</strong><span class="wcpi-badge wcpi-badge-' + (tone === 'alert' ? 'danger' : (tone === 'warning' ? 'warning' : 'success')) + '">' + WCPI.esc(badge) + '</span></div><p>' + WCPI.esc(item.body) + '</p><div class="wcpi-card-actions">' + cta + '<span class="dashicons dashicons-arrow-right-alt2"></span></div></article>';
         };
 
-        return '<div class="wcpi-grid wcpi-grid-3 wcpi-grid-top">' +
-            '<section class="wcpi-panel wcpi-span-2-panel"><div class="wcpi-panel-head"><div><h2>AI Recommendations</h2><p>Automated insights based on profit, cost, budget, and margin signals without changing your underlying data.</p></div></div><div class="wcpi-panel-note-block"><h3>Priority Alerts</h3><div class="wcpi-recommendation-grid">' + priority.map(cardMarkup).join('') + '</div></div><div class="wcpi-panel-note-block"><h3>Suggested Improvements</h3><div class="wcpi-recommendation-grid">' + (improvements.length ? improvements.map(cardMarkup).join('') : '<div class="wcpi-empty-inline">No additional improvements for this range.</div>') + '</div></div></section>' +
-            '<aside class="wcpi-panel wcpi-ai-panel"><div class="wcpi-panel-head"><div><h2>AI Health Score</h2><p>Compact signal summary inspired by premium analytics apps.</p></div></div><div class="wcpi-score-ring"><span>' + WCPI.esc(summary.score) + '</span><small>Health Score</small></div>' + actionCounts + '<div class="wcpi-stack">' + (trend.length ? trend.slice(0, 3).map(function(item){ return '<article class="wcpi-mini-card"><strong>' + WCPI.esc(item.title) + '</strong><small>' + WCPI.esc(item.body) + '</small></article>'; }).join('') : '<div class="wcpi-empty-inline">No trend warnings for this range.</div>') + '</div></aside>' +
-        '</div>';
+        return '<div class="wcpi-section-title">AI Recommendations</div>' +
+            '<div class="wcpi-grid wcpi-grid-3 wcpi-grid-top wcpi-rec-layout">' +
+                '<section class="wcpi-panel wcpi-span-2-panel"><div class="wcpi-panel-note-block"><h3>Priority Alerts <em>' + WCPI.esc(priority.length) + '</em></h3><div class="wcpi-recommendation-grid">' + (priority.length ? priority.map(cardMarkup).join('') : '<div class="wcpi-empty-inline">No priority alerts for this range.</div>') + '</div></div><div class="wcpi-panel-note-block"><h3>Suggested Improvements <em>' + WCPI.esc(improvements.length) + '</em></h3><div class="wcpi-recommendation-grid">' + (improvements.length ? improvements.map(cardMarkup).join('') : '<div class="wcpi-empty-inline">No additional improvements for this range.</div>') + '</div></div></section>' +
+                '<aside class="wcpi-panel wcpi-ai-panel"><div class="wcpi-panel-head"><div><h2>AI Health Score</h2><p>Compact signal summary inspired by premium analytics apps.</p></div></div><div class="wcpi-score-ring"><span>' + WCPI.esc(summary.score) + '</span><small>HEALTH SCORE</small></div><div class="wcpi-action-counts"><span class="wcpi-badge wcpi-badge-danger">Critical ' + summary.counts.alert + '</span><span class="wcpi-badge wcpi-badge-warning">Warning ' + summary.counts.warning + '</span><span class="wcpi-badge wcpi-badge-success">Opportunity ' + summary.counts.success + '</span></div><div class="wcpi-stack">' + (trend.length ? trend.slice(0, 3).map(function(item){ return '<article class="wcpi-mini-card"><strong>' + WCPI.esc(item.title) + '</strong><small>' + WCPI.esc(item.body) + '</small></article>'; }).join('') : '<div class="wcpi-empty-inline">No trend warnings for this range.</div>') + '</div></aside>' +
+            '</div>';
     }
 
     function renderProducts(payload){
-        return '<div class="wcpi-grid wcpi-grid-3 wcpi-grid-top">' +
-            '<section class="wcpi-panel wcpi-span-2-panel"><div class="wcpi-panel-head"><div><h2>Top Profitable Products</h2><p>Profit leaders appear first so winning catalog segments are easier to protect.</p></div></div>' + WCPI.renderTable(payload.top_products || []) + '</section>' +
-            '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Missing Cost Audit</h2><p>Audit gaps that still block accurate profitability calculations.</p></div></div>' + WCPI.renderAudit(payload.missing_cost_audit || null) + '</section>' +
-            '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Low Margin Products</h2><p>Products under pressure and likely leaking profit.</p></div></div>' + WCPI.renderTable(payload.low_margin || []) + '</section>' +
-            '<section class="wcpi-panel wcpi-span-2-panel"><div class="wcpi-panel-head"><div><h2>Category Margin Heatmap</h2><p>Premium heatmap cards for quick category scanning.</p></div></div>' + WCPI.renderHeatmap(payload.category_margin_heatmap || []) + '</section>' +
-        '</div>';
+        var topCount = (payload.top_products || []).length;
+        var lowCount = (payload.low_margin || []).length;
+        return '<div class="wcpi-section-title">Top Profitable Products</div>' +
+            '<div class="wcpi-grid wcpi-grid-3 wcpi-grid-top wcpi-products-layout">' +
+                '<section class="wcpi-panel wcpi-span-2-panel"><div class="wcpi-panel-head"><div><h2>Profit Leaders</h2><p>Winning catalog segments — easiest to protect and scale.</p></div><span class="wcpi-badge wcpi-badge-success">' + WCPI.esc(topCount) + ' Products</span></div>' + WCPI.renderTable(payload.top_products || []) + '</section>' +
+                '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Missing Cost Audit</h2><p>Gaps blocking accurate profitability calculations.</p></div></div>' + WCPI.renderAudit(payload.missing_cost_audit || null) + '</section>' +
+                '<section class="wcpi-panel wcpi-span-2-panel"><div class="wcpi-panel-head"><div><h2>Low Margin Products</h2><p>Products under pressure — likely leaking profit.</p></div><span class="wcpi-badge wcpi-badge-danger">' + WCPI.esc(lowCount) + ' Products</span></div>' + WCPI.renderTable(payload.low_margin || []) + '</section>' +
+            '</div>' +
+            '<div class="wcpi-section-title">Category Margin Heatmap</div>' +
+            '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Category Performance</h2><p>Premium heatmap cards for quick category scanning.</p></div></div>' + WCPI.renderHeatmap(payload.category_margin_heatmap || []) + '</section>';
     }
 
     function renderPlanning(payload){
         var notes = payload.report_notes || payload.notes || payload.active_notes || [];
         var nextActions = (payload.recommendations || []).slice(0, 4);
+        var goals = payload.goals || [];
+        var periodProgress = goals.length ? Number(goals[0].progress || 0).toFixed(1) + '%' : '0.0%';
 
-        return '<div class="wcpi-grid wcpi-grid-2">' +
-            '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Profit Goals</h2><p>Goals stay visible without competing with executive metrics.</p></div></div>' + WCPI.renderGoals(payload.goals || []) + '</section>' +
-            '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Budget vs Actual</h2><p>Monthly pressure areas and under-budget breathing room.</p></div></div>' + WCPI.renderBudgetVsActual(payload.budget_vs_actual || []) + '</section>' +
-        '</div>' +
-        '<div class="wcpi-grid wcpi-grid-2">' +
-            '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Dashboard Notes</h2><p>Effective notes, expiry windows, and color-coded categories stay visible here and on the main WordPress dashboard.</p></div><div class="wcpi-inline-tools"><button class="button button-primary" type="button" data-wcpi-modal-open="note">Add Note</button><button class="button" type="button" data-wcpi-modal-open="expense">Add Expense</button></div></div><div id="wcpi-dashboard-active-notes-board">' + WCPI.renderNotes(notes) + '</div></section>' +
-            '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Next Actions</h2><p>Compact planning prompts so the dashboard ends with clear movement.</p></div></div><div class="wcpi-stack">' + (nextActions.length ? nextActions.map(function(item){
-                return '<article class="wcpi-focus-card"><strong>' + WCPI.esc(item.title) + '</strong><p>' + WCPI.esc(item.body) + '</p>' + (item.cta_url ? '<a class="button button-small" href="' + WCPI.esc(item.cta_url) + '">' + WCPI.esc(item.cta_label || 'Open') + '</a>' : '') + '</article>';
-            }).join('') : '<div class="wcpi-empty-inline">No actions queued for this range.</div>') + '</div></section>' +
-        '</div>';
+        return '<div class="wcpi-section-title">Profit Goals</div>' +
+            '<div class="wcpi-grid wcpi-grid-1"><section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Goal Tracker</h2><p>Goals stay visible without competing with executive metrics.</p></div><span class="wcpi-badge wcpi-badge-danger">Behind</span></div>' + WCPI.renderGoals(goals) + '</section></div>' +
+            '<div class="wcpi-section-title">Budget vs Actual</div>' +
+            '<div class="wcpi-grid wcpi-grid-1"><section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Monthly Pressure Areas</h2><p>Over-budget and under-budget categories at a glance.</p></div></div>' + WCPI.renderBudgetVsActual(payload.budget_vs_actual || []) + '</section></div>' +
+            '<div class="wcpi-grid wcpi-grid-2 wcpi-plan-duo">' +
+                '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Dashboard Notes</h2><p>Color-coded notes visible here and on WordPress dashboard.</p></div><div class="wcpi-inline-tools"><button class="button button-primary" type="button" data-wcpi-modal-open="note">Add Note</button><button class="button" type="button" data-wcpi-modal-open="expense">Add Expense</button></div></div><div id="wcpi-dashboard-active-notes-board">' + WCPI.renderNotes(notes) + '</div></section>' +
+                '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Next Actions</h2><p>Compact planning prompts for clear movement.</p></div><span class="wcpi-badge wcpi-badge-danger">' + WCPI.esc(nextActions.length) + ' Open</span></div><div class="wcpi-stack">' + (nextActions.length ? nextActions.map(function(item, index){
+                    return '<article class="wcpi-focus-card"><strong><span class="wcpi-step-no">' + WCPI.esc(index + 1) + '</span> ' + WCPI.esc(item.title) + '</strong><p>' + WCPI.esc(item.body) + '</p>' + (item.cta_url ? '<a class="button button-small" href="' + WCPI.esc(item.cta_url) + '">' + WCPI.esc(item.cta_label || 'Review') + '</a>' : '') + '</article>';
+                }).join('') : '<div class="wcpi-empty-inline">No actions queued for this range.</div>') + '</div></section>' +
+            '</div>' +
+            '<div class="wcpi-section-title">Goal Analytics</div>' +
+            '<section class="wcpi-panel"><div class="wcpi-panel-head"><div><h2>Revenue vs Profit Progress Over Period</h2><p>Track actual performance against goals across the selected date range.</p></div><strong class="wcpi-period-progress">' + WCPI.esc(periodProgress) + '</strong></div><div class="wcpi-chart-frame"><canvas id="wcpiPlanningGoalChart" class="wcpi-chart" height="240"></canvas></div></section>';
     }
 
     function syncActiveNotes(payload){
@@ -343,6 +353,13 @@
                 drawLineChart(document.getElementById('wcpiExecutiveMarginChart'), state.payload.chart_labels || [], [
                     { label: 'Margin %', data: state.payload.chart_margin || [], color: '#6366f1', fillColor: 'rgba(99, 102, 241, 0.10)' }
                 ], WCPI.percent);
+            }
+
+            if(tab === 'planning'){
+                drawLineChart(document.getElementById('wcpiPlanningGoalChart'), state.payload.chart_labels || [], [
+                    { label: 'Revenue Actual', data: state.payload.chart_revenue || [], color: '#2563eb', fillColor: 'rgba(37, 99, 235, 0.10)' },
+                    { label: 'Net Profit Actual', data: state.payload.chart_profit || [], color: '#22c55e', fillColor: 'rgba(34, 197, 94, 0.08)' }
+                ], WCPI.money);
             }
         }
 

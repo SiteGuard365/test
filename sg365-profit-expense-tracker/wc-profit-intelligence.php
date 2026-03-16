@@ -3,7 +3,7 @@
  * Plugin Name: SG365 Profit & Expense Tracker for WooCommerce
  * Plugin URI:  https://siteguard365.com/
  * Description: Track real store profit, product costs, and business expenses directly inside WooCommerce.
- * Version:     1.4.3
+ * Version:     1.4.5
  * Author:      Site Guard 365
  * Author URI:  https://siteguard365.com/
  * Text Domain: sg365-profit-expense-tracker
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WCPI_VERSION', '1.4.3' );
+define( 'WCPI_VERSION', '1.4.5' );
 define( 'WCPI_PLUGIN_FILE', __FILE__ );
 define( 'WCPI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WCPI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
